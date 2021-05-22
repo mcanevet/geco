@@ -1,6 +1,7 @@
+---
 name: "Linters"
 
-on: ["pull_request"]
+on: ["pull_request"]  # yamllint disable-line rule:truthy
 
 jobs:
   validate-commits:
@@ -10,3 +11,14 @@ jobs:
         uses: "actions/checkout@v1"
       - name: "Commitsar check"
         uses: "aevea/commitsar@v0.16.0"
+  yamllint:
+    name: "runner / yamllint"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v1"
+      - name: "yamllint"
+        uses: "reviewdog/action-yamllint@v1"
+        with:
+          github_token: "${{ secrets.github_token }}"
+          filter_mode: "nofilter"
+          reporter: "github-pr-review"
