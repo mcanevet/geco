@@ -1,8 +1,12 @@
 import logging
 import os
+import glob
+from posixpath import basename
 import yaml
 import tempfile
 import shutil
+from pathlib import Path
+import subprocess
 from io import BytesIO
 from urllib.request import urlopen
 from zipfile import ZipFile
@@ -13,6 +17,7 @@ class Profile:
         self.efi_dir = path + "/EFI"
         self._load()
         self._create_efi_dir()
+        self._compile_ssdts()
         self._download_kexts()
         self._download_opencore()
         self._download_ocbinarydata()
@@ -94,3 +99,11 @@ class Profile:
                                     logging.debug("Moving "+ tmpdirname + "/" + file + " to " + self.efi_dir + "/OC/Kexts/" + os.path.basename(kext))
                                     shutil.move(tmpdirname + "/" + file, self.efi_dir + "/OC/Kexts/" + os.path.basename(kext))
 
+    def _compile_ssdts(self):
+        cwd = os.getcwd()
+        os.chdir(self.path + "/SSDTs")
+        for ssdt in glob.glob("*.dsl"):
+            aml_file = cwd + "/" + self.efi_dir + "/OC/ACPI/" + os.path.splitext(ssdt)[0] + ".aml"
+            logging.debug("Compiling " + ssdt + " to " + aml_file)
+            subprocess.run(["iasl", "-p", aml_file, ssdt])
+        os.chdir(cwd)
