@@ -90,12 +90,12 @@ class Profile:
                 with urlopen(zipurl) as zipresp:
                     with ZipFile(BytesIO(zipresp.read())) as zfile:
                         for file in zfile.namelist():
-                            for kext in files:
-                                if file.startswith(kext + "/"):
-                                    logging.debug("Extracting " + file)
-                                    zfile.extract(file, path=tmpdirname)
-                                    logging.debug("Moving "+ tmpdirname + "/" + file + " to " + self.efi_dir + "/OC/Kexts/" + os.path.basename(kext))
-                                    shutil.move(tmpdirname + "/" + file, self.efi_dir + "/OC/Kexts/" + os.path.basename(kext))
+                            if file.startswith(tuple([sub + "/" for sub in files])):
+                                logging.debug("Extracting " + file)
+                                zfile.extract(file, path=tmpdirname)
+                for file in files:
+                    logging.debug("Moving " + tmpdirname + "/" + file + " into " + self.efi_dir + "/OC/Kexts")
+                    shutil.move(tmpdirname + "/" + file, self.efi_dir + "/OC/Kexts/")
 
     def _compile_ssdts(self):
         cwd = os.getcwd()
