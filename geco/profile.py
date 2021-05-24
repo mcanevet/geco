@@ -35,8 +35,6 @@ class Profile:
             os.makedirs(self.efi_dir + "/OC")
         if not os.path.exists(self.efi_dir + "/OC/Tools"):
             os.makedirs(self.efi_dir + "/OC/Tools")
-        if not os.path.exists(self.efi_dir + "/OC/Resources"):
-            os.makedirs(self.efi_dir + "/OC/Resources")
         if not os.path.exists(self.efi_dir + "/OC/Kexts"):
             os.makedirs(self.efi_dir + "/OC/Kexts")
         if not os.path.exists(self.efi_dir + "/OC/Drivers"):
@@ -81,7 +79,7 @@ class Profile:
                 with ZipFile(BytesIO(zipresp.read())) as zfile:
                     zfile.extractall(path=tmpdirname)
                     shutil.move(tmpdirname + "/OcBinaryData-" + ref + "/Drivers/HfsPlus.efi", self.efi_dir + "/OC/Drivers/HfsPlus.efi")
-                    shutil.move(tmpdirname + "/OcBinaryData-" + ref + "/Resources", self.efi_dir + "/OC/Resources")
+                    shutil.move(tmpdirname + "/OcBinaryData-" + ref + "/Resources", self.efi_dir + "/OC")
 
     def _download_kexts(self):
         for kext in self.config["kexts"]:
