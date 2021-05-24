@@ -12,7 +12,6 @@ EFI
  |    BOOTX64.efi
  |- OC
     |- ACPI
-    |- Bootstrap
     |- Drivers
     |- Kexts
     |- Resources

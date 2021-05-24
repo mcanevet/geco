@@ -1,0 +1,17 @@
+---
+version: "1"
+
+opencore:
+  version: "0.6.6"
+  variant: "RELEASE"  # RELEASE or DEBUG
+  OcBinaryData-ref: "ccf3d0c36784100293ccfb2865e10cd37f7a78ee"  # git reference of https://github.com/acidanthera/OcBinaryData/
+
+kexts:
+  - source: "https://github.com/acidanthera/Lilu/releases/download/1.5.3/Lilu-1.5.3-RELEASE.zip"
+    files:
+      - "Lilu.kext"
+  - source: "https://github.com/acidanthera/VirtualSMC/releases/download/1.2.3/VirtualSMC-1.2.3-RELEASE.zip"
+    files:
+      - "Kexts/VirtualSMC.kext"
+      - "Kexts/SMCBatteryManager.kext"
+      - "Kexts/SMCProcessor.kext"
