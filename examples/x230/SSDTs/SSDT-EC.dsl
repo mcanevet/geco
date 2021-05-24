@@ -1,7 +1,26 @@
-DefinitionBlock ("", "SSDT", 2, "hack", "ECRW", 0x00000000)
+DefinitionBlock ("", "SSDT", 2, "X230", "EC", 0)
 {
-    External (_SB_.PCI0.LPC_.EC__, DeviceObj)
+    External (_SB.PCI0.LPC.EC, DeviceObj) 
+    
+    Scope (\)
+    {
+        Method (B1B2, 2, NotSerialized)
+        {
+            Local0 = (Arg1 << 0x08)
+            Local0 |= Arg0
+            Return (Local0)
+        }
 
+        Method (B1B4, 4, NotSerialized)
+        {
+            Local0 = Arg3
+            Local0 = (Arg2 | (Local0 << 0x08))
+            Local0 = (Arg1 | (Local0 << 0x08))
+            Local0 = (Arg0 | (Local0 << 0x08))
+            Return (Local0)
+        }
+    }
+    
     Scope (_SB.PCI0.LPC.EC)
     {
         Method (RE1B, 1, NotSerialized)
@@ -12,7 +31,7 @@ DefinitionBlock ("", "SSDT", 2, "hack", "ECRW", 0x00000000)
                 BYTE,   8
             }
 
-            Return (BYTE) /* \_SB_.PCI0.LPC_.EC__.RE1B.BYTE */
+            Return (BYTE)
         }
 
         Method (RECB, 2, Serialized)
@@ -28,7 +47,7 @@ DefinitionBlock ("", "SSDT", 2, "hack", "ECRW", 0x00000000)
                 Local0++
             }
 
-            Return (TEMP) /* \_SB_.PCI0.LPC_.EC__.RECB.TEMP */
+            Return (TEMP)
         }
 
         Method (WE1B, 2, NotSerialized)

@@ -1,12 +1,15 @@
-DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0x00000000)
-{
-    External (_SB_.PCI0.VID_, DeviceObj)
+DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
+{   
+    External (OSDW, MethodObj)
+    
     External (RMCF.BKLT, IntObj)
     External (RMCF.FBTP, IntObj)
     External (RMCF.GRAN, IntObj)
     External (RMCF.LEVW, IntObj)
     External (RMCF.LMAX, IntObj)
 
+    External (_SB.PCI0.VID, DeviceObj)
+    
     Scope (_SB.PCI0.VID)
     {
         OperationRegion (RMP3, PCI_Config, Zero, 0x14)
@@ -14,264 +17,261 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0x00000000)
 
     Device (_SB.PCI0.VID.PNLF)
     {
-        Name (_HID, EisaId ("APP0002"))  // _HID: Hardware ID
-        Name (_CID, "backlight")  // _CID: Compatible ID
-        Name (_UID, Zero)  // _UID: Unique ID
-        Method (_STA, 0, NotSerialized)  // _STA: Status
+        Name (_HID, EisaId ("APP0002"))
+        Name (_CID, "backlight")
+        Name (_UID, 0)
+        Method (_STA, 0, NotSerialized)
         {
-            If (_OSI ("Darwin"))
+            If (\OSDW ())
             {
                 Return (0x0B)
             }
-            Else
-            {
-                Return (Zero)
-            }
+            
+            Return (Zero)
         }
-
+        
         Field (^RMP3, AnyAcc, NoLock, Preserve)
         {
-            Offset (0x02),
-            GDID,   16,
-            Offset (0x10),
+            Offset (0x02), 
+            GDID,   16, 
+            Offset (0x10), 
             BAR1,   32
         }
 
-        OperationRegion (RMB1, SystemMemory, (BAR1 & 0xFFFFFFFFFFFFFFF0), 0x000E1184)
+        OperationRegion (RMB1, SystemMemory, And (BAR1, 0xFFFFFFFFFFFFFFF0), 0x000E1184)
         Field (RMB1, AnyAcc, Lock, Preserve)
         {
-            Offset (0x48250),
-            LEV2,   32,
-            LEVL,   32,
-            Offset (0x70040),
-            P0BL,   32,
-            Offset (0xC2000),
-            GRAN,   32,
-            Offset (0xC8250),
-            LEVW,   32,
-            LEVX,   32,
-            LEVD,   32,
-            Offset (0xE1180),
+            Offset (0x48250), 
+            LEV2,   32, 
+            LEVL,   32, 
+            Offset (0x70040), 
+            P0BL,   32, 
+            Offset (0xC2000), 
+            GRAN,   32, 
+            Offset (0xC8250), 
+            LEVW,   32, 
+            LEVX,   32, 
+            LEVD,   32, 
+            Offset (0xE1180), 
             PCHL,   32
         }
 
         Method (INI1, 1, NotSerialized)
         {
-            If ((Zero == (0x02 & Arg0)))
+            If (LEqual (Zero, And (0x02, Arg0)))
             {
-                Local5 = 0xC0000000
+                Store (0xC0000000, Local5)
                 If (CondRefOf (\RMCF.LEVW))
                 {
-                    If ((Ones != \RMCF.LEVW))
+                    If (LNotEqual (Ones, \RMCF.LEVW))
                     {
-                        Local5 = \RMCF.LEVW /* External reference */
+                        Store (\RMCF.LEVW, Local5)
                     }
                 }
 
-                ^LEVW = Local5
+                Store (Local5, ^LEVW)
             }
 
-            If ((0x04 & Arg0))
+            If (And (0x04, Arg0))
             {
                 If (CondRefOf (\RMCF.GRAN))
                 {
-                    ^GRAN = \RMCF.GRAN /* External reference */
+                    Store (\RMCF.GRAN, ^GRAN)
                 }
                 Else
                 {
-                    ^GRAN = Zero
+                    Store (Zero, ^GRAN)
                 }
             }
         }
 
-        Method (_INI, 0, NotSerialized)  // _INI: Initialize
+        Method (_INI, 0, NotSerialized)
         {
-            Local4 = One
+            Store (One, Local4)
             If (CondRefOf (\RMCF.BKLT))
             {
-                Local4 = \RMCF.BKLT /* External reference */
+                Store (\RMCF.BKLT, Local4)
             }
 
-            If (!(One & Local4))
+            If (LNot (And (One, Local4)))
             {
                 Return (Zero)
             }
 
-            Local0 = ^GDID /* \_SB_.PCI0.VID_.PNLF.GDID */
-            Local2 = Ones
+            Store (^GDID, Local0)
+            Store (Ones, Local2)
             If (CondRefOf (\RMCF.LMAX))
             {
-                Local2 = \RMCF.LMAX /* External reference */
+                Store (\RMCF.LMAX, Local2)
             }
 
-            Local3 = Zero
+            Store (Zero, Local3)
             If (CondRefOf (\RMCF.FBTP))
             {
-                Local3 = \RMCF.FBTP /* External reference */
+                Store (\RMCF.FBTP, Local3)
             }
 
-            If (((One == Local3) || (Ones != Match (Package (0x10)
+            If (LOr (LEqual (One, Local3), LNotEqual (Ones, Match (Package (0x10)
                                 {
-                                    0x010B,
-                                    0x0102,
-                                    0x0106,
-                                    0x1106,
-                                    0x1601,
-                                    0x0116,
-                                    0x0126,
-                                    0x0112,
-                                    0x0122,
-                                    0x0152,
-                                    0x0156,
-                                    0x0162,
-                                    0x0166,
-                                    0x016A,
-                                    0x46,
+                                    0x010B, 
+                                    0x0102, 
+                                    0x0106, 
+                                    0x1106, 
+                                    0x1601, 
+                                    0x0116, 
+                                    0x0126, 
+                                    0x0112, 
+                                    0x0122, 
+                                    0x0152, 
+                                    0x0156, 
+                                    0x0162, 
+                                    0x0166, 
+                                    0x016A, 
+                                    0x46, 
                                     0x42
                                 }, MEQ, Local0, MTR, Zero, Zero))))
             {
-                If ((Ones == Local2))
+                If (LEqual (Ones, Local2))
                 {
-                    Local2 = 0x0710
+                    Store (0x0710, Local2)
                 }
 
-                Local1 = (^LEVX >> 0x10)
-                If (!Local1)
+                ShiftRight (^LEVX, 0x10, Local1)
+                If (LNot (Local1))
                 {
-                    Local1 = Local2
+                    Store (Local2, Local1)
                 }
 
-                If ((!(0x08 & Local4) && (Local2 != Local1)))
+                If (LAnd (LNot (And (0x08, Local4)), LNotEqual (Local2, Local1)))
                 {
-                    Local0 = ((^LEVL * Local2) / Local1)
-                    Local3 = (Local2 << 0x10)
-                    If ((Local2 > Local1))
+                    Divide (Multiply (^LEVL, Local2), Local1, , Local0)
+                    ShiftLeft (Local2, 0x10, Local3)
+                    If (LGreater (Local2, Local1))
                     {
-                        ^LEVX = Local3
-                        ^LEVL = Local0
+                        Store (Local3, ^LEVX)
+                        Store (Local0, ^LEVL)
                     }
                     Else
                     {
-                        ^LEVL = Local0
-                        ^LEVX = Local3
+                        Store (Local0, ^LEVL)
+                        Store (Local3, ^LEVX)
                     }
                 }
             }
-            ElseIf (((0x03 == Local3) || (Ones != Match (Package (0x04)
+            ElseIf (LOr (LEqual (0x03, Local3), LNotEqual (Ones, Match (Package (0x04)
                                 {
-                                    0x3E9B,
-                                    0x3EA5,
-                                    0x3E92,
+                                    0x3E9B, 
+                                    0x3EA5, 
+                                    0x3E92, 
                                     0x3E91
                                 }, MEQ, Local0, MTR, Zero, Zero))))
             {
-                If ((Ones == Local2))
+                If (LEqual (Ones, Local2))
                 {
-                    Local2 = 0xFFFF
+                    Store (0xFFFF, Local2)
                 }
 
                 INI1 (Local4)
-                Local1 = ^LEVX /* \_SB_.PCI0.VID_.PNLF.LEVX */
-                If (!Local1)
+                Store (^LEVX, Local1)
+                If (LNot (Local1))
                 {
-                    Local1 = Local2
+                    Store (Local2, Local1)
                 }
 
-                If ((!(0x08 & Local4) && (Local2 != Local1)))
+                If (LAnd (LNot (And (0x08, Local4)), LNotEqual (Local2, Local1)))
                 {
-                    Local0 = ((^LEVD * Local2) / Local1)
-                    If ((Local2 > Local1))
+                    Divide (Multiply (^LEVD, Local2), Local1, , Local0)
+                    If (LGreater (Local2, Local1))
                     {
-                        ^LEVX = Local2
-                        ^LEVD = Local0
+                        Store (Local2, ^LEVX)
+                        Store (Local0, ^LEVD)
                     }
                     Else
                     {
-                        ^LEVD = Local0
-                        ^LEVX = Local2
+                        Store (Local0, ^LEVD)
+                        Store (Local2, ^LEVX)
                     }
                 }
             }
             Else
             {
-                If ((Ones == Local2))
+                If (LEqual (Ones, Local2))
                 {
-                    If ((Ones != Match (Package (0x16)
+                    If (LNotEqual (Ones, Match (Package (0x16)
                                     {
-                                        0x0D26,
-                                        0x0A26,
-                                        0x0D22,
-                                        0x0412,
-                                        0x0416,
-                                        0x0A16,
-                                        0x0A1E,
-                                        0x0A1E,
-                                        0x0A2E,
-                                        0x041E,
-                                        0x041A,
-                                        0x0BD1,
-                                        0x0BD2,
-                                        0x0BD3,
-                                        0x1606,
-                                        0x160E,
-                                        0x1616,
-                                        0x161E,
-                                        0x1626,
-                                        0x1622,
-                                        0x1612,
+                                        0x0D26, 
+                                        0x0A26, 
+                                        0x0D22, 
+                                        0x0412, 
+                                        0x0416, 
+                                        0x0A16, 
+                                        0x0A1E, 
+                                        0x0A1E, 
+                                        0x0A2E, 
+                                        0x041E, 
+                                        0x041A, 
+                                        0x0BD1, 
+                                        0x0BD2, 
+                                        0x0BD3, 
+                                        0x1606, 
+                                        0x160E, 
+                                        0x1616, 
+                                        0x161E, 
+                                        0x1626, 
+                                        0x1622, 
+                                        0x1612, 
                                         0x162B
                                     }, MEQ, Local0, MTR, Zero, Zero)))
                     {
-                        Local2 = 0x0AD9
+                        Store (0x0AD9, Local2)
                     }
                     Else
                     {
-                        Local2 = 0x056C
+                        Store (0x056C, Local2)
                     }
                 }
 
                 INI1 (Local4)
-                Local1 = (^LEVX >> 0x10)
-                If (!Local1)
+                ShiftRight (^LEVX, 0x10, Local1)
+                If (LNot (Local1))
                 {
-                    Local1 = Local2
+                    Store (Local2, Local1)
                 }
 
-                If ((!(0x08 & Local4) && (Local2 != Local1)))
+                If (LAnd (LNot (And (0x08, Local4)), LNotEqual (Local2, Local1)))
                 {
-                    Local0 = ((((^LEVX & 0xFFFF) * Local2) / Local1) |
-                        (Local2 << 0x10))
-                    ^LEVX = Local0
+                    Or (Divide (Multiply (And (^LEVX, 0xFFFF), Local2), Local1, ), ShiftLeft (Local2, 0x10), Local0)
+                    Store (Local0, ^LEVX)
                 }
             }
 
-            If ((Local2 == 0x0710))
+            If (LEqual (Local2, 0x0710))
             {
-                _UID = 0x0E
+                Store (0x0E, _UID)
             }
-            ElseIf ((Local2 == 0x0AD9))
+            ElseIf (LEqual (Local2, 0x0AD9))
             {
-                _UID = 0x0F
+                Store (0x0F, _UID)
             }
-            ElseIf ((Local2 == 0x056C))
+            ElseIf (LEqual (Local2, 0x056C))
             {
-                _UID = 0x10
+                Store (0x10, _UID)
             }
-            ElseIf ((Local2 == 0x07A1))
+            ElseIf (LEqual (Local2, 0x07A1))
             {
-                _UID = 0x11
+                Store (0x11, _UID)
             }
-            ElseIf ((Local2 == 0x1499))
+            ElseIf (LEqual (Local2, 0x1499))
             {
-                _UID = 0x12
+                Store (0x12, _UID)
             }
-            ElseIf ((Local2 == 0xFFFF))
+            ElseIf (LEqual (Local2, 0xFFFF))
             {
-                _UID = 0x13
+                Store (0x13, _UID)
             }
             Else
             {
-                _UID = 0x63
+                Store (0x63, _UID)
             }
         }
     }

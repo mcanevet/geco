@@ -1,54 +1,50 @@
-DefinitionBlock ("", "SSDT", 2, "X230", "HRTF", 0x00000000)
+DefinitionBlock ("", "SSDT", 2, "X230", "HRTF", 0)
 {
-    External (_SB_.PCI0.LPC_, DeviceObj)
-    External (_SB_.PCI0.LPC_.HPET, DeviceObj)
-    External (_SB_.PCI0.LPC_.PIC_, DeviceObj)
-    External (_SB_.PCI0.LPC_.RTC_, DeviceObj)
-    External (_SB_.PCI0.LPC_.TIMR, DeviceObj)
-    External (HPET, FieldUnitObj)
+    External (OSDW, MethodObj)
+    
+    External (_SB.PCI0.LPC, DeviceObj)
+    External (_SB.PCI0.LPC.PIC, DeviceObj)
+    External (_SB.PCI0.LPC.RTC, DeviceObj)
+    External (_SB.PCI0.LPC.TIMR, DeviceObj)
+    External (_SB.PCI0.LPC.HPET, DeviceObj)
+    External (\HPET, FieldUnitObj)
 
     Scope (_SB.PCI0.LPC.PIC)
     {
-        Method (_STA, 0, NotSerialized)  // _STA: Status
+        Method (_STA, 0, NotSerialized)
         {
-            If (_OSI ("Darwin"))
+            If (\OSDW ())
             {
                 Return (Zero)
             }
-            Else
-            {
-                Return (0x0F)
-            }
+            
+            Return (0x0F)
         }
     }
 
     Scope (_SB.PCI0.LPC.RTC)
     {
-        Method (_STA, 0, NotSerialized)  // _STA: Status
+        Method (_STA, 0, NotSerialized)
         {
-            If (_OSI ("Darwin"))
+            If (\OSDW ())
             {
                 Return (Zero)
             }
-            Else
-            {
-                Return (0x0F)
-            }
+            
+            Return (0x0F)
         }
     }
 
     Scope (_SB.PCI0.LPC.TIMR)
     {
-        Method (_STA, 0, NotSerialized)  // _STA: Status
+        Method (_STA, 0, NotSerialized)
         {
-            If (_OSI ("Darwin"))
+            If (\OSDW ())
             {
                 Return (Zero)
             }
-            Else
-            {
-                Return (0x0F)
-            }
+            
+            Return (0x0F)
         }
     }
 
@@ -56,47 +52,46 @@ DefinitionBlock ("", "SSDT", 2, "X230", "HRTF", 0x00000000)
     {
         Device (IPIC)
         {
-            Name (_HID, EisaId ("PNP0000") /* 8259-compatible Programmable Interrupt Controller */)  // _HID: Hardware ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            Name (_HID, EisaId ("PNP0000"))
+            Name (_CRS, ResourceTemplate ()
             {
                 IO (Decode16,
-                    0x0020,             // Range Minimum
-                    0x0020,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
+                    0x0020,
+                    0x0020,
+                    0x01,
+                    0x02,
                     )
                 IO (Decode16,
-                    0x00A0,             // Range Minimum
-                    0x00A0,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
+                    0x00A0,
+                    0x00A0,
+                    0x01,
+                    0x02,
                     )
                 IO (Decode16,
-                    0x04D0,             // Range Minimum
-                    0x04D0,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
+                    0x04D0,
+                    0x04D0,
+                    0x01,
+                    0x02,
                     )
                 IRQNoFlags ()
                     {2}
             })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
+
+            Method (_STA, 0, NotSerialized)
             {
-                If (_OSI ("Darwin"))
+                If (\OSDW ())
                 {
                     Return (0x0F)
                 }
-                Else
-                {
-                    Return (Zero)
-                }
+
+                Return (Zero)
             }
         }
 
         Device (HPE0)
         {
-            Name (_HID, EisaId ("PNP0103") /* HPET System Timer */)  // _HID: Hardware ID
-            Name (_UID, Zero)  // _UID: Unique ID
+            Name (_HID, EisaId ("PNP0103"))
+            Name (_UID, Zero)
             Name (BUF0, ResourceTemplate ()
             {
                 IRQNoFlags ()
@@ -104,77 +99,74 @@ DefinitionBlock ("", "SSDT", 2, "X230", "HRTF", 0x00000000)
                 IRQNoFlags ()
                     {8}
                 Memory32Fixed (ReadWrite,
-                    0xFED00000,         // Address Base
-                    0x00000400,         // Address Length
-                    _Y00)
+                    0xFED00000,
+                    0x00000400,
+                    _Y24)
             })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
+
+            Method (_STA, 0, NotSerialized)
             {
-                If (_OSI ("Darwin"))
+                If (\OSDW ())
                 {
                     Return (0x0F)
                 }
-                Else
-                {
-                    Return (Zero)
-                }
+
+                Return (Zero)
             }
 
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            Method (_CRS, 0, Serialized)
             {
-                CreateDWordField (BUF0, \_SB.PCI0.LPC.HPE0._Y00._BAS, HPT0)  // _BAS: Base Address
-                HPT0 = \HPET /* External reference */
-                Return (BUF0) /* \_SB_.PCI0.LPC_.HPE0.BUF0 */
+                CreateDWordField (BUF0, \_SB.PCI0.LPC.HPE0._Y24._BAS, HPT0)
+                HPT0 = \HPET
+                Return (BUF0)
             }
         }
 
         Device (RTC0)
         {
-            Name (_HID, EisaId ("PNP0B00") /* AT Real-Time Clock */)  // _HID: Hardware ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            Name (_HID, EisaId ("PNP0B00"))
+            Name (_CRS, ResourceTemplate ()
             {
                 IO (Decode16,
-                    0x0070,             // Range Minimum
-                    0x0070,             // Range Maximum
-                    0x01,               // Alignment
-                    0x08,               // Length
+                    0x0070,
+                    0x0070,
+                    0x01,
+                    0x08,
                     )
             })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
+
+            Method (_STA, 0, NotSerialized)
             {
-                If (_OSI ("Darwin"))
+                If (\OSDW ())
                 {
                     Return (0x0F)
                 }
-                Else
-                {
-                    Return (Zero)
-                }
+
+                Return (Zero)
             }
         }
 
         Device (TIM0)
         {
-            Name (_HID, EisaId ("PNP0100") /* PC-class System Timer */)  // _HID: Hardware ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            Name (_HID, EisaId ("PNP0100"))
+            Name (_CRS, ResourceTemplate ()
             {
                 IO (Decode16,
-                    0x0040,             // Range Minimum
-                    0x0040,             // Range Maximum
-                    0x01,               // Alignment
-                    0x04,               // Length
+                    0x0040,
+                    0x0040,
+                    0x01,
+                    0x04,
                     )
             })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
+
+            Method (_STA, 0, NotSerialized)
             {
-                If (_OSI ("Darwin"))
+                If (\OSDW ())
                 {
                     Return (0x0F)
                 }
-                Else
-                {
-                    Return (Zero)
-                }
+
+                Return (Zero)
             }
         }
     }

@@ -1,38 +1,40 @@
-DefinitionBlock ("", "SSDT", 2, "T460s", "PTWK", 0x00000000)
+DefinitionBlock("", "SSDT", 2, "X230", "PTWK", 0)
 {
-    External (_SB_.LID_, DeviceObj)
-    External (_SB_.PCI0, DeviceObj)
-    External (_SB_.PCI0._LPC.EC__._LED, IntObj)
-    External (_SB_.PCI0._LPC.EC__.HKEY.MMTS, MethodObj)    // 1 Arguments
-    External (_SB_.PCI0.LPC_, DeviceObj)
-    External (_SB_.PCI0.LPC_.EC__, DeviceObj)
-    External (_SB_.PCI0.XHCI.PMEE, FieldUnitObj)
-    External (ZPTS, MethodObj)    // 1 Arguments
-    External (ZWAK, MethodObj)    // 1 Arguments
+    External (OSDW, MethodObj)
+    
+    External (ZPTS, MethodObj)
+    External (ZWAK, MethodObj)
+    
+    External (_SB.LID, DeviceObj)
+    External (_SB.PCI0, DeviceObj)
+    External (_SB.PCI0.LPC, DeviceObj)
+    External (_SB.PCI0.LPC.EC, DeviceObj)
+    External (_SB.PCI0.XHCI.PMEE, FieldUnitObj)
+    External (_SB.PCI0.LPC.EC.HKEY.MMTS, MethodObj)
+    External (_SB.PCI0.LPC.EC.LED, IntObj)
 
     Scope (_SB)
     {
         Device (PCI9)
         {
-            Name (_ADR, Zero)  // _ADR: Address
+            Name (_ADR, Zero)
             Name (FNOK, Zero)
             Name (MODE, Zero)
+            
             Name (TPTS, Zero)
             Name (TWAK, Zero)
-            Method (_STA, 0, NotSerialized)  // _STA: Status
+            Method (_STA, 0, NotSerialized)
             {
-                If (_OSI ("Darwin"))
+                If (OSDW ())
                 {
                     Return (0x0F)
                 }
-                Else
-                {
-                    Return (Zero)
-                }
+                
+                Return (Zero)
             }
         }
     }
-
+    
     Scope (\_SB.PCI0.LPC.EC)
     {
         OperationRegion (WRAM, EmbeddedControl, Zero, 0x0100)
@@ -45,66 +47,67 @@ DefinitionBlock ("", "SSDT", 2, "T460s", "PTWK", 0x00000000)
 
         Method (WACH, 0, NotSerialized)
         {
-            Return ((WAC0 | (WAC1 << 0x08)))
+        	Return ((WAC0 | (WAC1 << 0x08)))
         }
     }
-
-    Method (_PTS, 1, NotSerialized)  // _PTS: Prepare To Sleep
+    
+    Method (_PTS, 1, NotSerialized)
     {
         If (_OSI ("Darwin"))
         {
             \_SB.PCI9.TPTS = Arg0
-            If ((\_SB.PCI9.FNOK == One))
+            
+            if(\_SB.PCI9.FNOK ==1)
             {
-                Arg0 = 0x03
+                Arg0 = 3
             }
-
-            If (((0x05 == Arg0) && CondRefOf (\_SB.PCI0.XHCI.PMEE)))
-            {
-                \_SB.PCI0.XHCI.PMEE = Zero
+            
+            If ((5 == Arg0) && CondRefOf (\_SB.PCI0.XHCI.PMEE)) {
+            \_SB.PCI0.XHCI.PMEE = 0
             }
         }
 
-        ZPTS (Arg0)
+        ZPTS(Arg0)
+
     }
 
-    Method (_WAK, 1, NotSerialized)  // _WAK: Wake
+    Method (_WAK, 1, NotSerialized)
     {
         If (_OSI ("Darwin"))
         {
             \_SB.PCI9.TWAK = Arg0
-            If ((\_SB.PCI9.FNOK == One))
+            
+            if(\_SB.PCI9.FNOK ==1)
             {
-                \_SB.PCI9.FNOK = Zero
-                Arg0 = 0x03
+                \_SB.PCI9.FNOK =0
+                Arg0 = 3
             }
+            If (Arg0 < 1 || Arg0 > 5)
+            { Arg0 = 3 }
 
-            If (((Arg0 < One) || (Arg0 > 0x05)))
+            If (3 == Arg0)
             {
-                Arg0 = 0x03
-            }
-
-            If ((0x03 == Arg0))
-            {
-                Notify (\_SB.LID, 0x80) // Status Change
-            }
+                Notify (\_SB.LID, 0x80)
+             }
         }
 
-        Local0 = ZWAK (Arg0)
+        Local0 = ZWAK(Arg0)
+
         Return (Local0)
     }
 
-    Method (_TTS, 1, NotSerialized)  // _TTS: Transition To State
+    Method (_TTS, 1, NotSerialized)
     {
         If (_OSI ("Darwin"))
         {
-            If (CondRefOf (\_SB.PCI0._LPC.EC._LED))
+            If (CondRefOf (_SB.PCI0.LPC.EC.LED))
             {
-                If (((Arg0 == Zero) & (\_SB.PCI0._LPC.EC._LED == One)))
+                If (Arg0 == Zero & \_SB.PCI0.LPC.EC.LED == One)
                 {
-                    \_SB.PCI0._LPC.EC.HKEY.MMTS (0x02)
+                    \_SB.PCI0.LPC.EC.HKEY.MMTS (0x02)
                 }
             }
         }
+
     }
 }
