@@ -41,12 +41,12 @@ kexts:
   - source: "https://github.com/acidanthera/HibernationFixup/releases/download/1.4.0/HibernationFixup-1.4.0-RELEASE.zip"
     files:
       - "HibernationFixup.kext"
-  - source: "https://github.com/Sniki/OS-X-USB-Inject-All/releases/download/v0.7.6/USBInjectAll-0.7.6-RELEASE.zip"
+  - source: "https://github.com/Sniki/OS-X-USB-Inject-All/releases/download/v0.7.1/USBInjectAll-0.7.1-RELEASE.zip"
     files:
       - "USBInjectAll.kext"
-  - source: "https://github.com/acidanthera/VoodooPS2/releases/download/2.2.3/VoodooPS2Controller-2.2.3-RELEASE.zip"
+  - source: "https://bitbucket.org/RehabMan/os-x-voodoo-ps2-controller/downloads/RehabMan-Voodoo-2018-1008.zip"
     files:
-      - "VoodooPS2Controller.kext"
+      - "Release/VoodooPS2Controller.kext"
   - source: "https://github.com/acidanthera/WhateverGreen/releases/download/1.4.9/WhateverGreen-1.4.9-RELEASE.zip"
     files:
       - "WhateverGreen.kext"
