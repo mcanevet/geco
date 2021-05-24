@@ -15,3 +15,41 @@ kexts:
       - "Kexts/VirtualSMC.kext"
       - "Kexts/SMCBatteryManager.kext"
       - "Kexts/SMCProcessor.kext"
+  - source: "https://github.com/acidanthera/IntelMausi/releases/download/1.0.6/IntelMausi-1.0.6-RELEASE.zip"
+    files:
+      - "IntelMausi.kext"
+  - source: "https://github.com/acidanthera/AirportBrcmFixup/releases/download/2.1.2/AirportBrcmFixup-2.1.2-RELEASE.zip"
+    files:
+      - "AirportBrcmFixup.kext"
+  - source: "https://github.com/acidanthera/AppleALC/releases/download/1.6.0/AppleALC-1.6.0-RELEASE.zip"
+    files:
+      - "AppleALC.kext"
+  - source: "https://github.com/acidanthera/BrcmPatchRAM/releases/download/2.5.5/BrcmPatchRAM-2.5.5-RELEASE.zip"
+    files:
+      - "BrcmBluetoothInjector.kext"
+      - "BrcmFirmwareData.kext"
+      - "BrcmPatchRAM3.kext"
+  - source: "https://github.com/acidanthera/BrightnessKeys/releases/download/1.0.1/BrightnessKeys-1.0.1-RELEASE.zip"
+    files:
+      - "BrightnessKeys.kext"
+  - source: "https://github.com/1Revenger1/ECEnabler/releases/download/1.0.1/ECEnabler-1.0.1-RELEASE.zip"
+    files:
+      - "ECEnabler.kext"
+  - source: "https://github.com/RehabMan/hack-tools/archive/b02c00191ab884ff6cd07c941808a48ad046fbd9.zip"
+    files:
+      - "hack-tools-b02c00191ab884ff6cd07c941808a48ad046fbd9/kexts/EFICheckDisabler.kext"
+  - source: "https://github.com/acidanthera/HibernationFixup/releases/download/1.4.0/HibernationFixup-1.4.0-RELEASE.zip"
+    files:
+      - "HibernationFixup.kext"
+  - source: "https://github.com/Sniki/OS-X-USB-Inject-All/releases/download/v0.7.6/USBInjectAll-0.7.6-RELEASE.zip"
+    files:
+      - "USBInjectAll.kext"
+  - source: "https://github.com/acidanthera/VoodooPS2/releases/download/2.2.3/VoodooPS2Controller-2.2.3-RELEASE.zip"
+    files:
+      - "VoodooPS2Controller.kext"
+  - source: "https://github.com/acidanthera/WhateverGreen/releases/download/1.4.9/WhateverGreen-1.4.9-RELEASE.zip"
+    files:
+      - "WhateverGreen.kext"
+  - source: "https://github.com/zhen-zen/YogaSMC/releases/download/1.4.3/YogaSMC-Release.zip"
+    files:
+      - "YogaSMC.kext"
