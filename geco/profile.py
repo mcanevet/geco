@@ -79,7 +79,7 @@ class Profile:
         logging.debug("MYROOT=" + MYROOT)
         a = augeas.Augeas(root=MYROOT)
         with open(MYROOT + "/Config.plist") as config_file:
-            with open("config.augtool", "r") as file:
+            with open("geco/config.augtool", "r") as file:
                 transformations = file.read()
                 logging.debug("Applying Augeas transformations: " + transformations)
                 a.srun(config_file, transformations)
