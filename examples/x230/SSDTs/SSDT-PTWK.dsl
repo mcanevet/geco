@@ -1,113 +1,131 @@
-DefinitionBlock("", "SSDT", 2, "X230", "PTWK", 0)
+/*
+ * Intel ACPI Component Architecture
+ * AML/ASL+ Disassembler version 20200925 (64-bit version)
+ * Copyright (c) 2000 - 2020 Intel Corporation
+ * 
+ * Disassembling to symbolic ASL+ operators
+ *
+ * Disassembly of SSDT-PTWK.aml, Tue May 25 21:04:28 2021
+ *
+ * Original Table Header:
+ *     Signature        "SSDT"
+ *     Length           0x000002BD (701)
+ *     Revision         0x02
+ *     Checksum         0x7D
+ *     OEM ID           "T460s"
+ *     OEM Table ID     "PTWK"
+ *     OEM Revision     0x00000000 (0)
+ *     Compiler ID      "INTL"
+ *     Compiler Version 0x20200925 (538970405)
+ */
+DefinitionBlock ("", "SSDT", 2, "T460s", "PTWK", 0x00000000)
 {
-    External (OSDW, MethodObj)
-    
-    External (ZPTS, MethodObj)
-    External (ZWAK, MethodObj)
-    
-    External (_SB.LID, DeviceObj)
-    External (_SB.PCI0, DeviceObj)
-    External (_SB.PCI0.LPC, DeviceObj)
-    External (_SB.PCI0.LPC.EC, DeviceObj)
-    External (_SB.PCI0.XHCI.PMEE, FieldUnitObj)
-    External (_SB.PCI0.LPC.EC.HKEY.MMTS, MethodObj)
-    External (_SB.PCI0.LPC.EC.LED, IntObj)
+    External (_SB_.LID_, DeviceObj)
+    External (_SB_.PCI0, DeviceObj)
+    External (_SB_.PCI0._LPC.EC__._LED, IntObj)
+    External (_SB_.PCI0._LPC.EC__.HKEY.MMTS, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.LPC_, DeviceObj)
+    External (_SB_.PCI0.LPC_.EC__, DeviceObj)
+    External (_SB_.PCI0.XHCI.PMEE, FieldUnitObj)
+    External (ZPTS, MethodObj)    // 1 Arguments
+    External (ZWAK, MethodObj)    // 1 Arguments
 
     Scope (_SB)
     {
         Device (PCI9)
         {
-            Name (_ADR, Zero)
+            Name (_ADR, Zero)  // _ADR: Address
             Name (FNOK, Zero)
             Name (MODE, Zero)
-            
             Name (TPTS, Zero)
             Name (TWAK, Zero)
-            Method (_STA, 0, NotSerialized)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (OSDW ())
+                If (_OSI ("Darwin"))
                 {
                     Return (0x0F)
                 }
-                
-                Return (Zero)
+                Else
+                {
+                    Return (Zero)
+                }
             }
         }
     }
-    
+
     Scope (\_SB.PCI0.LPC.EC)
     {
         OperationRegion (WRAM, EmbeddedControl, Zero, 0x0100)
         Field (WRAM, ByteAcc, NoLock, Preserve)
         {
-            Offset (0x36),
-            WAC0,   8,
+            Offset (0x36), 
+            WAC0,   8, 
             WAC1,   8
         }
 
         Method (WACH, 0, NotSerialized)
         {
-        	Return ((WAC0 | (WAC1 << 0x08)))
+            Return ((WAC0 | (WAC1 << 0x08)))
         }
     }
-    
-    Method (_PTS, 1, NotSerialized)
+
+    Method (_PTS, 1, NotSerialized)  // _PTS: Prepare To Sleep
     {
         If (_OSI ("Darwin"))
         {
             \_SB.PCI9.TPTS = Arg0
-            
-            if(\_SB.PCI9.FNOK ==1)
+            If ((\_SB.PCI9.FNOK == One))
             {
-                Arg0 = 3
+                Arg0 = 0x03
             }
-            
-            If ((5 == Arg0) && CondRefOf (\_SB.PCI0.XHCI.PMEE)) {
-            \_SB.PCI0.XHCI.PMEE = 0
+
+            If (((0x05 == Arg0) && CondRefOf (\_SB.PCI0.XHCI.PMEE)))
+            {
+                \_SB.PCI0.XHCI.PMEE = Zero
             }
         }
 
-        ZPTS(Arg0)
-
+        ZPTS (Arg0)
     }
 
-    Method (_WAK, 1, NotSerialized)
+    Method (_WAK, 1, NotSerialized)  // _WAK: Wake
     {
         If (_OSI ("Darwin"))
         {
             \_SB.PCI9.TWAK = Arg0
-            
-            if(\_SB.PCI9.FNOK ==1)
+            If ((\_SB.PCI9.FNOK == One))
             {
-                \_SB.PCI9.FNOK =0
-                Arg0 = 3
+                \_SB.PCI9.FNOK = Zero
+                Arg0 = 0x03
             }
-            If (Arg0 < 1 || Arg0 > 5)
-            { Arg0 = 3 }
 
-            If (3 == Arg0)
+            If (((Arg0 < One) || (Arg0 > 0x05)))
             {
-                Notify (\_SB.LID, 0x80)
-             }
+                Arg0 = 0x03
+            }
+
+            If ((0x03 == Arg0))
+            {
+                Notify (\_SB.LID, 0x80) // Status Change
+            }
         }
 
-        Local0 = ZWAK(Arg0)
-
+        Local0 = ZWAK (Arg0)
         Return (Local0)
     }
 
-    Method (_TTS, 1, NotSerialized)
+    Method (_TTS, 1, NotSerialized)  // _TTS: Transition To State
     {
         If (_OSI ("Darwin"))
         {
-            If (CondRefOf (_SB.PCI0.LPC.EC.LED))
+            If (CondRefOf (\_SB.PCI0._LPC.EC._LED))
             {
-                If (Arg0 == Zero & \_SB.PCI0.LPC.EC.LED == One)
+                If (((Arg0 == Zero) & (\_SB.PCI0._LPC.EC._LED == One)))
                 {
-                    \_SB.PCI0.LPC.EC.HKEY.MMTS (0x02)
+                    \_SB.PCI0._LPC.EC.HKEY.MMTS (0x02)
                 }
             }
         }
-
     }
 }
+

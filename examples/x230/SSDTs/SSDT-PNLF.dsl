@@ -1,15 +1,32 @@
-DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
-{   
-    External (OSDW, MethodObj)
-    
+/*
+ * Intel ACPI Component Architecture
+ * AML/ASL+ Disassembler version 20200925 (64-bit version)
+ * Copyright (c) 2000 - 2020 Intel Corporation
+ * 
+ * Disassembling to symbolic ASL+ operators
+ *
+ * Disassembly of SSDT-PNLF.aml, Tue May 25 21:04:28 2021
+ *
+ * Original Table Header:
+ *     Signature        "SSDT"
+ *     Length           0x00000477 (1143)
+ *     Revision         0x02
+ *     Checksum         0xBA
+ *     OEM ID           "X230"
+ *     OEM Table ID     "PNLF"
+ *     OEM Revision     0x00000000 (0)
+ *     Compiler ID      "INTL"
+ *     Compiler Version 0x20200925 (538970405)
+ */
+DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0x00000000)
+{
+    External (_SB_.PCI0.VID_, DeviceObj)
     External (RMCF.BKLT, IntObj)
     External (RMCF.FBTP, IntObj)
     External (RMCF.GRAN, IntObj)
     External (RMCF.LEVW, IntObj)
     External (RMCF.LMAX, IntObj)
 
-    External (_SB.PCI0.VID, DeviceObj)
-    
     Scope (_SB.PCI0.VID)
     {
         OperationRegion (RMP3, PCI_Config, Zero, 0x14)
@@ -17,19 +34,21 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
 
     Device (_SB.PCI0.VID.PNLF)
     {
-        Name (_HID, EisaId ("APP0002"))
-        Name (_CID, "backlight")
-        Name (_UID, 0)
-        Method (_STA, 0, NotSerialized)
+        Name (_HID, EisaId ("APP0002"))  // _HID: Hardware ID
+        Name (_CID, "backlight")  // _CID: Compatible ID
+        Name (_UID, Zero)  // _UID: Unique ID
+        Method (_STA, 0, NotSerialized)  // _STA: Status
         {
-            If (\OSDW ())
+            If (_OSI ("Darwin"))
             {
                 Return (0x0B)
             }
-            
-            Return (Zero)
+            Else
+            {
+                Return (Zero)
+            }
         }
-        
+
         Field (^RMP3, AnyAcc, NoLock, Preserve)
         {
             Offset (0x02), 
@@ -38,7 +57,7 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
             BAR1,   32
         }
 
-        OperationRegion (RMB1, SystemMemory, And (BAR1, 0xFFFFFFFFFFFFFFF0), 0x000E1184)
+        OperationRegion (RMB1, SystemMemory, (BAR1 & 0xFFFFFFFFFFFFFFF0), 0x000E1184)
         Field (RMB1, AnyAcc, Lock, Preserve)
         {
             Offset (0x48250), 
@@ -58,60 +77,60 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
 
         Method (INI1, 1, NotSerialized)
         {
-            If (LEqual (Zero, And (0x02, Arg0)))
+            If ((Zero == (0x02 & Arg0)))
             {
-                Store (0xC0000000, Local5)
+                Local5 = 0xC0000000
                 If (CondRefOf (\RMCF.LEVW))
                 {
-                    If (LNotEqual (Ones, \RMCF.LEVW))
+                    If ((Ones != \RMCF.LEVW))
                     {
-                        Store (\RMCF.LEVW, Local5)
+                        Local5 = \RMCF.LEVW /* External reference */
                     }
                 }
 
-                Store (Local5, ^LEVW)
+                ^LEVW = Local5
             }
 
-            If (And (0x04, Arg0))
+            If ((0x04 & Arg0))
             {
                 If (CondRefOf (\RMCF.GRAN))
                 {
-                    Store (\RMCF.GRAN, ^GRAN)
+                    ^GRAN = \RMCF.GRAN /* External reference */
                 }
                 Else
                 {
-                    Store (Zero, ^GRAN)
+                    ^GRAN = Zero
                 }
             }
         }
 
-        Method (_INI, 0, NotSerialized)
+        Method (_INI, 0, NotSerialized)  // _INI: Initialize
         {
-            Store (One, Local4)
+            Local4 = One
             If (CondRefOf (\RMCF.BKLT))
             {
-                Store (\RMCF.BKLT, Local4)
+                Local4 = \RMCF.BKLT /* External reference */
             }
 
-            If (LNot (And (One, Local4)))
+            If (!(One & Local4))
             {
                 Return (Zero)
             }
 
-            Store (^GDID, Local0)
-            Store (Ones, Local2)
+            Local0 = ^GDID /* \_SB_.PCI0.VID_.PNLF.GDID */
+            Local2 = Ones
             If (CondRefOf (\RMCF.LMAX))
             {
-                Store (\RMCF.LMAX, Local2)
+                Local2 = \RMCF.LMAX /* External reference */
             }
 
-            Store (Zero, Local3)
+            Local3 = Zero
             If (CondRefOf (\RMCF.FBTP))
             {
-                Store (\RMCF.FBTP, Local3)
+                Local3 = \RMCF.FBTP /* External reference */
             }
 
-            If (LOr (LEqual (One, Local3), LNotEqual (Ones, Match (Package (0x10)
+            If (((One == Local3) || (Ones != Match (Package (0x10)
                                 {
                                     0x010B, 
                                     0x0102, 
@@ -131,34 +150,34 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
                                     0x42
                                 }, MEQ, Local0, MTR, Zero, Zero))))
             {
-                If (LEqual (Ones, Local2))
+                If ((Ones == Local2))
                 {
-                    Store (0x0710, Local2)
+                    Local2 = 0x0710
                 }
 
-                ShiftRight (^LEVX, 0x10, Local1)
-                If (LNot (Local1))
+                Local1 = (^LEVX >> 0x10)
+                If (!Local1)
                 {
-                    Store (Local2, Local1)
+                    Local1 = Local2
                 }
 
-                If (LAnd (LNot (And (0x08, Local4)), LNotEqual (Local2, Local1)))
+                If ((!(0x08 & Local4) && (Local2 != Local1)))
                 {
-                    Divide (Multiply (^LEVL, Local2), Local1, , Local0)
-                    ShiftLeft (Local2, 0x10, Local3)
-                    If (LGreater (Local2, Local1))
+                    Local0 = ((^LEVL * Local2) / Local1)
+                    Local3 = (Local2 << 0x10)
+                    If ((Local2 > Local1))
                     {
-                        Store (Local3, ^LEVX)
-                        Store (Local0, ^LEVL)
+                        ^LEVX = Local3
+                        ^LEVL = Local0
                     }
                     Else
                     {
-                        Store (Local0, ^LEVL)
-                        Store (Local3, ^LEVX)
+                        ^LEVL = Local0
+                        ^LEVX = Local3
                     }
                 }
             }
-            ElseIf (LOr (LEqual (0x03, Local3), LNotEqual (Ones, Match (Package (0x04)
+            ElseIf (((0x03 == Local3) || (Ones != Match (Package (0x04)
                                 {
                                     0x3E9B, 
                                     0x3EA5, 
@@ -166,38 +185,38 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
                                     0x3E91
                                 }, MEQ, Local0, MTR, Zero, Zero))))
             {
-                If (LEqual (Ones, Local2))
+                If ((Ones == Local2))
                 {
-                    Store (0xFFFF, Local2)
+                    Local2 = 0xFFFF
                 }
 
                 INI1 (Local4)
-                Store (^LEVX, Local1)
-                If (LNot (Local1))
+                Local1 = ^LEVX /* \_SB_.PCI0.VID_.PNLF.LEVX */
+                If (!Local1)
                 {
-                    Store (Local2, Local1)
+                    Local1 = Local2
                 }
 
-                If (LAnd (LNot (And (0x08, Local4)), LNotEqual (Local2, Local1)))
+                If ((!(0x08 & Local4) && (Local2 != Local1)))
                 {
-                    Divide (Multiply (^LEVD, Local2), Local1, , Local0)
-                    If (LGreater (Local2, Local1))
+                    Local0 = ((^LEVD * Local2) / Local1)
+                    If ((Local2 > Local1))
                     {
-                        Store (Local2, ^LEVX)
-                        Store (Local0, ^LEVD)
+                        ^LEVX = Local2
+                        ^LEVD = Local0
                     }
                     Else
                     {
-                        Store (Local0, ^LEVD)
-                        Store (Local2, ^LEVX)
+                        ^LEVD = Local0
+                        ^LEVX = Local2
                     }
                 }
             }
             Else
             {
-                If (LEqual (Ones, Local2))
+                If ((Ones == Local2))
                 {
-                    If (LNotEqual (Ones, Match (Package (0x16)
+                    If ((Ones != Match (Package (0x16)
                                     {
                                         0x0D26, 
                                         0x0A26, 
@@ -223,56 +242,58 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
                                         0x162B
                                     }, MEQ, Local0, MTR, Zero, Zero)))
                     {
-                        Store (0x0AD9, Local2)
+                        Local2 = 0x0AD9
                     }
                     Else
                     {
-                        Store (0x056C, Local2)
+                        Local2 = 0x056C
                     }
                 }
 
                 INI1 (Local4)
-                ShiftRight (^LEVX, 0x10, Local1)
-                If (LNot (Local1))
+                Local1 = (^LEVX >> 0x10)
+                If (!Local1)
                 {
-                    Store (Local2, Local1)
+                    Local1 = Local2
                 }
 
-                If (LAnd (LNot (And (0x08, Local4)), LNotEqual (Local2, Local1)))
+                If ((!(0x08 & Local4) && (Local2 != Local1)))
                 {
-                    Or (Divide (Multiply (And (^LEVX, 0xFFFF), Local2), Local1, ), ShiftLeft (Local2, 0x10), Local0)
-                    Store (Local0, ^LEVX)
+                    Local0 = ((((^LEVX & 0xFFFF) * Local2) / Local1) | 
+                        (Local2 << 0x10))
+                    ^LEVX = Local0
                 }
             }
 
-            If (LEqual (Local2, 0x0710))
+            If ((Local2 == 0x0710))
             {
-                Store (0x0E, _UID)
+                _UID = 0x0E
             }
-            ElseIf (LEqual (Local2, 0x0AD9))
+            ElseIf ((Local2 == 0x0AD9))
             {
-                Store (0x0F, _UID)
+                _UID = 0x0F
             }
-            ElseIf (LEqual (Local2, 0x056C))
+            ElseIf ((Local2 == 0x056C))
             {
-                Store (0x10, _UID)
+                _UID = 0x10
             }
-            ElseIf (LEqual (Local2, 0x07A1))
+            ElseIf ((Local2 == 0x07A1))
             {
-                Store (0x11, _UID)
+                _UID = 0x11
             }
-            ElseIf (LEqual (Local2, 0x1499))
+            ElseIf ((Local2 == 0x1499))
             {
-                Store (0x12, _UID)
+                _UID = 0x12
             }
-            ElseIf (LEqual (Local2, 0xFFFF))
+            ElseIf ((Local2 == 0xFFFF))
             {
-                Store (0x13, _UID)
+                _UID = 0x13
             }
             Else
             {
-                Store (0x63, _UID)
+                _UID = 0x63
             }
         }
     }
 }
+
