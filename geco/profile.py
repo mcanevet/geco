@@ -10,6 +10,7 @@ import subprocess
 from io import BytesIO
 from urllib.request import urlopen
 from zipfile import ZipFile
+import augeas
 
 class Profile:
     def __init__(self, path):
@@ -17,9 +18,10 @@ class Profile:
         self.efi_dir = path + "/EFI"
         self._load()
         self._create_efi_dir()
+        self._download_opencore()
+        self._patch_config_plist()
         self._compile_ssdts()
         self._download_kexts()
-        self._download_opencore()
         self._download_ocbinarydata()
 
     def _create_efi_dir(self):
@@ -71,6 +73,16 @@ class Profile:
                     shutil.move(tmpdirname + "/X64/EFI/OC/Tools/OpenShell.efi", self.efi_dir + "/OC/Drivers/OpenShell.efi")
                     zfile.extract("Docs/Sample.plist", path=tmpdirname)
                     shutil.move(tmpdirname + "/Docs/Sample.plist", self.efi_dir + "/OC/Config.plist")
+
+    def _patch_config_plist(self):
+        MYROOT = os.getcwd() + "/" + self.efi_dir + "/OC"
+        logging.debug("MYROOT=" + MYROOT)
+        a = augeas.Augeas(root=MYROOT)
+        with open(MYROOT + "/Config.plist") as config_file:
+            with open("config.augtool", "r") as file:
+                transformations = file.read()
+                logging.debug("Applying Augeas transformations: " + transformations)
+                a.srun(config_file, transformations)
 
     def _download_ocbinarydata(self):
         ref = self.config["opencore"]["OcBinaryData-ref"]
