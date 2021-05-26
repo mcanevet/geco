@@ -16,15 +16,8 @@ class Profile:
     def __init__(self, path):
         self.path = path
         self.efi_dir = path + "/EFI"
-        self._load()
-        self._create_efi_dir()
-        self._download_opencore()
-        self._patch_config_plist()
-        self._compile_ssdts()
-        self._download_kexts()
-        self._download_ocbinarydata()
 
-    def _create_efi_dir(self):
+    def create_efi_dir(self):
         try:
             shutil.rmtree(self.efi_dir)
         except FileNotFoundError:
@@ -44,7 +37,7 @@ class Profile:
         if not os.path.exists(self.efi_dir + "/OC/ACPI"):
             os.makedirs(self.efi_dir + "/OC/ACPI")
 
-    def _load(self):
+    def load(self):
         try:
             with open(self.path + "/geco.yaml", "r") as stream:
                 try:
@@ -54,8 +47,9 @@ class Profile:
                     logging.fatal(exc)
         except IOError:
             logging.fatal("Can't open " + self.path + "/geco.yaml")
+            raise
 
-    def _download_opencore(self):
+    def download_opencore(self):
         zipurl = "https://github.com/acidanthera/OpenCorePkg/releases/download/" + self.config["opencore"]["version"] + "/OpenCore-" + self.config["opencore"]["version"] + "-" + self.config["opencore"]["variant"] + ".zip"
         logging.info("Downloading " + zipurl + "...")
         with tempfile.TemporaryDirectory() as tmpdirname:
@@ -74,7 +68,7 @@ class Profile:
                     zfile.extract("Docs/Sample.plist", path=tmpdirname)
                     shutil.move(tmpdirname + "/Docs/Sample.plist", self.efi_dir + "/OC/Config.plist")
 
-    def _patch_config_plist(self):
+    def patch_config_plist(self):
         MYROOT = os.getcwd() + "/" + self.efi_dir + "/OC"
         logging.debug("MYROOT=" + MYROOT)
         a = augeas.Augeas(root=MYROOT)
@@ -84,7 +78,7 @@ class Profile:
                 logging.debug("Applying Augeas transformations: " + transformations)
                 a.srun(config_file, transformations)
 
-    def _download_ocbinarydata(self):
+    def download_ocbinarydata(self):
         ref = self.config["opencore"]["OcBinaryData-ref"]
         zipurl = "https://github.com/acidanthera/OcBinaryData/archive/" + ref + ".zip"
         logging.info("Downloading " + zipurl + "...")
@@ -95,7 +89,7 @@ class Profile:
                     shutil.move(tmpdirname + "/OcBinaryData-" + ref + "/Drivers/HfsPlus.efi", self.efi_dir + "/OC/Drivers/HfsPlus.efi")
                     shutil.move(tmpdirname + "/OcBinaryData-" + ref + "/Resources", self.efi_dir + "/OC")
 
-    def _download_kexts(self):
+    def download_kexts(self):
         for kext in self.config["kexts"]:
             zipurl = kext["source"]
             files = kext["files"]
@@ -111,7 +105,7 @@ class Profile:
                     logging.debug("Moving " + tmpdirname + "/" + file + " into " + self.efi_dir + "/OC/Kexts")
                     shutil.move(tmpdirname + "/" + file, self.efi_dir + "/OC/Kexts/")
 
-    def _compile_ssdts(self):
+    def compile_ssdts(self):
         cwd = os.getcwd()
         os.chdir(self.path + "/SSDTs")
         for ssdt in glob.glob("*.dsl"):

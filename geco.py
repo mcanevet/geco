@@ -11,11 +11,14 @@ def parse_arguments():
     return parser.parse_args()
 
 def main():
-    logging.debug("In main().")
-    prof = profile.Profile(args.profile)
-    logging.debug(prof)
-    logging.debug(prof.path)
-    pass
+    p = profile.Profile(args.profile)
+    p.load()
+    p.create_efi_dir()
+    p.download_opencore()
+    p.patch_config_plist()
+    p.compile_ssdts()
+    p.download_kexts()
+    p.download_ocbinarydata()
 
 if __name__ == "__main__":
     args = parse_arguments()

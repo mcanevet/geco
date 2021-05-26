@@ -2,6 +2,6 @@ autopep8==1.5.7
 cffi==1.14.5
 pycodestyle==2.7.0
 pycparser==2.20
-python-augeas==1.1.0
+git+https://github.com/hercules-team/python-augeas.git@f74c4a8
 PyYAML==5.4.1
 toml==0.10.2
