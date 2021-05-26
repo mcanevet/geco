@@ -1,5 +1,3 @@
-set /augeas/context /files/Config.plist/plist/dict
-
 # Remove WARNING text
 rm string[preceding-sibling::key[#text =~ regexp("^#WARNING - .*")]]
 rm key[#text =~ regexp("^#WARNING - .*")]

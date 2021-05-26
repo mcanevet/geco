@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import glob
 from posixpath import basename
 import yaml
@@ -76,7 +77,11 @@ class Profile:
             with open("geco/config.augtool", "r") as file:
                 transformations = file.read()
                 logging.debug("Applying Augeas transformations: " + transformations)
-                a.srun(config_file, transformations)
+                a.add_transform("Xml", "/Config.plist")
+                a.load()
+                a.set("/augeas/context", "/files/Config.plist/plist/dict")
+                a.srun(sys.stdout, transformations)
+                a.save()
 
     def download_ocbinarydata(self):
         ref = self.config["opencore"]["OcBinaryData-ref"]
