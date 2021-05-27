@@ -1,0 +1,17 @@
+---
+name: "release-please"
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  release-please:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "GoogleCloudPlatform/release-please-action@v2"
+        with:
+          release-type: "python"
+          package-name: "geco"
