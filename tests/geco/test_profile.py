@@ -17,3 +17,9 @@ def test_load_failure():
     profile = Profile("unexisting_profile")
     with pytest.raises(IOError):
         profile.load()
+
+
+def test_create_efi_dir_success():
+    profile = Profile("examples/x230")
+    profile.load()
+    profile.create_efi_dir()
