@@ -4,6 +4,7 @@ import argparse
 import logging
 import pathlib
 import sys
+from geco import profile
 
 
 def create_parser():
@@ -21,3 +22,5 @@ def main(argv=sys.argv[1:]):
         logging.basicConfig(level=logging.DEBUG)
         logging.debug("verbosity turned on")
     logging.debug("Profile = " + str(args.profile))
+    p = profile.Profile(args.profile)
+    p.load()
