@@ -23,3 +23,9 @@ def test_create_efi_dir_success():
     profile = Profile("examples/x230")
     profile.load()
     profile.create_efi_dir()
+
+
+def test_download_opencore():
+    profile = Profile("examples/x230")
+    profile.load()
+    profile.download_opencore()
