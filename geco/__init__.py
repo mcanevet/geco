@@ -25,3 +25,4 @@ def main(argv=sys.argv[1:]):
     p = profile.Profile(args.profile)
     p.load()
     p.create_efi_dir()
+    p.download_opencore()

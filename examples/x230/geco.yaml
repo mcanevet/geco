@@ -1,2 +1,7 @@
 ---
 version: "1"
+
+opencore:
+  version: "0.7.0"
+  prerelease: "974228a"
+  variant: "RELEASE"

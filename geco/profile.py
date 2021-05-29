@@ -1,7 +1,11 @@
 import logging
 import os
 import shutil
+import tempfile
 import yaml
+from io import BytesIO
+from urllib.request import urlopen
+from zipfile import ZipFile
 
 
 class Profile:
@@ -40,3 +44,26 @@ class Profile:
             os.makedirs(self.efi_dir + "/OC/Drivers")
         if not os.path.exists(self.efi_dir + "/OC/ACPI"):
             os.makedirs(self.efi_dir + "/OC/ACPI")
+
+    def download_opencore(self):
+        try:
+            zipurl_prefix = "https://github.com/dortania/build-repo/releases/download/OpenCorePkg-" + self.config["opencore"]["prerelease"]
+        except KeyError:
+            zipurl_prefix = "https://github.com/acidanthera/OpenCorePkg/releases/download/" + self.config["opencore"]["version"]
+        zipurl = zipurl_prefix + "/OpenCore-" + self.config["opencore"]["version"] + "-" + self.config["opencore"]["variant"] + ".zip"
+        logging.info("Downloading " + zipurl + "...")
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with urlopen(zipurl) as zipresp:
+                with ZipFile(BytesIO(zipresp.read())) as zfile:
+                    zfile.extract("X64/EFI/BOOT/BOOTx64.efi", path=tmpdirname)
+                    shutil.move(tmpdirname + "/X64/EFI/BOOT/BOOTx64.efi", self.efi_dir + "/BOOT/BOOTx64.efi")
+                    zfile.extract("X64/EFI/OC/OpenCore.efi", path=tmpdirname)
+                    shutil.move(tmpdirname + "/X64/EFI/OC/OpenCore.efi", self.efi_dir + "/OC/OpenCore.efi")
+                    zfile.extract("X64/EFI/OC/Drivers/OpenRuntime.efi", path=tmpdirname)
+                    shutil.move(tmpdirname + "/X64/EFI/OC/Drivers/OpenRuntime.efi", self.efi_dir + "/OC/Drivers/OpenRuntime.efi")
+                    zfile.extract("X64/EFI/OC/Drivers/OpenCanopy.efi", path=tmpdirname)
+                    shutil.move(tmpdirname + "/X64/EFI/OC/Drivers/OpenCanopy.efi", self.efi_dir + "/OC/Drivers/OpenCanopy.efi")
+                    zfile.extract("X64/EFI/OC/Tools/OpenShell.efi", path=tmpdirname)
+                    shutil.move(tmpdirname + "/X64/EFI/OC/Tools/OpenShell.efi", self.efi_dir + "/OC/Drivers/OpenShell.efi")
+                    zfile.extract("Docs/Sample.plist", path=tmpdirname)
+                    shutil.move(tmpdirname + "/Docs/Sample.plist", self.efi_dir + "/OC/Config.plist")
