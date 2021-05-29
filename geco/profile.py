@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import os
 import shutil
@@ -6,6 +7,14 @@ import yaml
 from io import BytesIO
 from urllib.request import urlopen
 from zipfile import ZipFile
+
+
+def md5(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
 
 
 class Profile:
@@ -44,6 +53,22 @@ class Profile:
             os.makedirs(self.efi_dir + "/OC/Drivers")
         if not os.path.exists(self.efi_dir + "/OC/ACPI"):
             os.makedirs(self.efi_dir + "/OC/ACPI")
+
+    def checksum(self):
+        logging.debug("Checking md5sum")
+        with open(self.path + "/md5sum.txt", "r") as f:
+            while True:
+                line = f.readline()
+                if not line:
+                    break
+                md5sum, filename = line.split()
+                filename = self.path + "/" + filename
+                logging.debug("Checking file: " + filename)
+                m = md5(filename)
+                logging.debug("md5 = " + m)
+                logging.debug("exprected md5 = " + md5sum)
+                if m != md5sum:
+                    raise Exception
 
     def download_opencore(self):
         try:
