@@ -5,13 +5,13 @@ import unittest
 from argparse import Namespace
 
 
-def test_init_success():
-    main()
+def test_main_success():
+    main(["-p", "examples/x230"])
 
 
-def test_init_failure():
-    with pytest.raises(TypeError):
-        main("foo")
+def test_main_failure():
+    with pytest.raises(SystemExit):
+        main()
 
 
 class ParserTest(unittest.TestCase):
