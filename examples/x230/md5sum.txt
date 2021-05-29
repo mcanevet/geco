@@ -1,0 +1,4 @@
+4f20303dacf960845b5efc3f23e972ea  EFI/BOOT/BOOTx64.efi
+a6f9949d5eb775ae5797ab90cd714858  EFI/OC/Drivers/OpenRuntime.efi
+d7a7ccb0744eeccf20cf8386d7340ad4  EFI/OC/Drivers/OpenCanopy.efi
+0fb048392c68b4299581b6ddb4bc6b78  EFI/OC/OpenCore.efi
