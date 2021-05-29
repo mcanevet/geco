@@ -24,3 +24,4 @@ def main(argv=sys.argv[1:]):
     logging.debug("Profile = " + str(args.profile))
     p = profile.Profile(args.profile)
     p.load()
+    p.create_efi_dir()
