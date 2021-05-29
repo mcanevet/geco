@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import pathlib
 import sys
 
 
@@ -9,6 +10,8 @@ def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", help="increase output verbosity",
                         action="store_true")
+    parser.add_argument("-p", "--profile", help="the geco profile to load",
+                        type=pathlib.Path, required=True)
     return parser
 
 
