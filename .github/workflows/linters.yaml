@@ -11,7 +11,7 @@ jobs:
       - name: "Check out code into the Go module directory"
         uses: "actions/checkout@v1"
       - name: "Commitsar check"
-        uses: "aevea/commitsar@v0.16.0"
+        uses: "docker://aevea/commitsar:0.16.0"
   yamllint:
     runs-on: "ubuntu-latest"
     steps:
