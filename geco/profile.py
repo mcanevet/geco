@@ -92,3 +92,19 @@ class Profile:
                     shutil.move(tmpdirname + "/X64/EFI/OC/Tools/OpenShell.efi", self.efi_dir + "/OC/Drivers/OpenShell.efi")
                     zfile.extract("Docs/Sample.plist", path=tmpdirname)
                     shutil.move(tmpdirname + "/Docs/Sample.plist", self.efi_dir + "/OC/Config.plist")
+
+    def download_kexts(self):
+        for kext in self.config["kexts"]:
+            zipurl = kext["source"]
+            files = kext["files"]
+            logging.info("Downloading " + zipurl + "...")
+            with tempfile.TemporaryDirectory() as tmpdirname:
+                with urlopen(zipurl) as zipresp:
+                    with ZipFile(BytesIO(zipresp.read())) as zfile:
+                        for file in zfile.namelist():
+                            if file.startswith(tuple([sub + "/" for sub in files])):
+                                logging.debug("Extracting " + file)
+                                zfile.extract(file, path=tmpdirname)
+                for file in files:
+                    logging.debug("Moving " + tmpdirname + "/" + file + " into " + self.efi_dir + "/OC/Kexts")
+                    shutil.move(tmpdirname + "/" + file, self.efi_dir + "/OC/Kexts/")

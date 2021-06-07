@@ -5,3 +5,50 @@ opencore:
   version: "0.7.0"
   prerelease: "974228a"
   variant: "RELEASE"
+
+kexts:
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/OpenIntelWireless/itlwm/releases/download/v2.0.0-alpha/AirportItlwm-Big_Sur-v2.0.0-DEBUG-alpha-9af1571.zip"
+    files:
+      - "Big Sur/AirportItlwm.kext"
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/acidanthera/AppleALC/releases/download/1.6.0/AppleALC-1.6.0-RELEASE.zip"
+    files:
+      - "AppleALC.kext"
+  # TODO: Add BlueTooth_BCM.kext
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/acidanthera/BrightnessKeys/releases/download/1.0.1/BrightnessKeys-1.0.1-RELEASE.zip"
+    files:
+      - "BrightnessKeys.kext"
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/1Revenger1/ECEnabler/releases/download/1.0.1/ECEnabler-1.0.1-RELEASE.zip"
+    files:
+      - "ECEnabler.kext"
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/acidanthera/IntelMausi/releases/download/1.0.6/IntelMausi-1.0.6-RELEASE.zip"
+    files:
+      - "IntelMausi.kext"
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/acidanthera/Lilu/releases/download/1.5.3/Lilu-1.5.3-RELEASE.zip"
+    files:
+      - "Lilu.kext"
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/acidanthera/VirtualSMC/releases/download/1.2.3/VirtualSMC-1.2.3-RELEASE.zip"
+    files:
+      - "Kexts/SMCBatteryManager.kext"
+      - "Kexts/SMCProcessor.kext"
+      - "Kexts/VirtualSMC.kext"
+  # TODO: add USBPorts.kext
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/acidanthera/VoodooPS2/releases/download/2.2.3/VoodooPS2Controller-2.2.3-RELEASE.zip"
+    files:
+      - "VoodooPS2Controller.kext"
+  # TODO: add VoodooSDHC.kext
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/acidanthera/WhateverGreen/releases/download/1.4.9/WhateverGreen-1.4.9-RELEASE.zip"
+    files:
+      - "WhateverGreen.kext"
+  # yamllint disable-line rule:line-length
+  - source: "https://github.com/zhen-zen/YogaSMC/releases/download/1.5.1/YogaSMC-Release.zip"
+    files:
+      - "YogaSMC.kext"
