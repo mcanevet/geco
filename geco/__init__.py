@@ -29,4 +29,5 @@ def main(argv=sys.argv[1:]):
     p.download_ocbinarydata()
     p.download_kexts()
     p.compile_ssdts()
+    p.patch_config_plist()
     p.checksum()

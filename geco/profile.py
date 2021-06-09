@@ -1,9 +1,11 @@
+import augeas
 import glob
 import hashlib
 import logging
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import yaml
 from io import BytesIO
@@ -130,3 +132,17 @@ class Profile:
             logging.debug("Compiling " + ssdt + " to " + aml_file)
             subprocess.run(["iasl", "-p", aml_file, ssdt])
         os.chdir(cwd)
+
+    def patch_config_plist(self):
+        MYROOT = os.getcwd() + "/" + self.efi_dir + "/OC"
+        logging.debug("MYROOT=" + MYROOT)
+        a = augeas.Augeas(root=MYROOT)
+        with open(MYROOT + "/Config.plist"):
+            with open("geco/config.augtool", "r") as file:
+                transformations = file.read()
+                logging.debug("Applying Augeas transformations: " + transformations)
+                a.add_transform("Xml", "/Config.plist")
+                a.load()
+                a.set("/augeas/context", "/files/Config.plist/plist/dict")
+                a.srun(sys.stdout, transformations)
+                a.save()
