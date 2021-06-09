@@ -108,3 +108,14 @@ class Profile:
                 for file in files:
                     logging.debug("Moving " + tmpdirname + "/" + file + " into " + self.efi_dir + "/OC/Kexts")
                     shutil.move(tmpdirname + "/" + file, self.efi_dir + "/OC/Kexts/")
+
+    def download_ocbinarydata(self):
+        ref = self.config["opencore"]["OcBinaryData-ref"]
+        zipurl = "https://github.com/acidanthera/OcBinaryData/archive/" + ref + ".zip"
+        logging.info("Downloading " + zipurl + "...")
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with urlopen(zipurl) as zipresp:
+                with ZipFile(BytesIO(zipresp.read())) as zfile:
+                    zfile.extractall(path=tmpdirname)
+                    shutil.move(tmpdirname + "/OcBinaryData-" + ref + "/Drivers/HfsPlus.efi", self.efi_dir + "/OC/Drivers/HfsPlus.efi")
+                    shutil.move(tmpdirname + "/OcBinaryData-" + ref + "/Resources", self.efi_dir + "/OC")
