@@ -26,5 +26,6 @@ def main(argv=sys.argv[1:]):
     p.load()
     p.create_efi_dir()
     p.download_opencore()
+    p.download_ocbinarydata()
     p.download_kexts()
     p.checksum()
