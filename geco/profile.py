@@ -134,7 +134,7 @@ class Profile:
         os.chdir(cwd)
 
     def patch_config_plist(self):
-        MYROOT = os.getcwd() + "/" + self.efi_dir + "/OC"
+        MYROOT = self.efi_dir + "/OC"
         logging.debug("MYROOT=" + MYROOT)
         a = augeas.Augeas(root=MYROOT)
         with open(MYROOT + "/Config.plist"):
