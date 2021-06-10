@@ -10,7 +10,7 @@ opencore:
 
 kexts:
   # yamllint disable-line rule:line-length
-  - source: "https://github.com/OpenIntelWireless/itlwm/releases/download/v2.0.0-alpha/AirportItlwm-Big_Sur-v2.0.0-DEBUG-alpha-9af1571.zip"
+  - source: "https://github.com/OpenIntelWireless/itlwm/releases/download/v2.0.0-alpha/AirportItlwm-Big_Sur-v2.0.0-DEBUG-alpha-258c1ab.zip"
     files:
       - "Big Sur/AirportItlwm.kext"
   # yamllint disable-line rule:line-length
