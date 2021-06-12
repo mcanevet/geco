@@ -9,7 +9,7 @@ e45d40193baab703d464bcb04b45b686  EFI/OC/Kexts/AppleALC.kext/Contents/Info.plist
 db24c1d4345ba43a7e85467805750237  EFI/OC/Kexts/ECEnabler.kext/Contents/Info.plist
 62af40bb3bbd731d8f5073438c522c94  EFI/OC/Kexts/ECEnabler.kext/Contents/MacOS/ECEnabler
 178713b6ed6a51777205bb1ed7f8b848  EFI/OC/Kexts/AirportItlwm.kext/Contents/Info.plist
-8d7e1231be28b2c189ea062fd46ceeb0  EFI/OC/Kexts/AirportItlwm.kext/Contents/MacOS/AirportItlwm
+e627fe297c6e2d5419a6d749bdd75a15  EFI/OC/Kexts/AirportItlwm.kext/Contents/MacOS/AirportItlwm
 da05e312ea0876d0b3dcc74f4df002e7  EFI/OC/Kexts/BrightnessKeys.kext/Contents/Info.plist
 4e6bead8fbf0b2f6cc24aa1ee4d7638f  EFI/OC/Kexts/BrightnessKeys.kext/Contents/MacOS/BrightnessKeys
 61b8158420ed172f120e756a74f8c69c  EFI/OC/Kexts/VoodooPS2Controller.kext/Contents/PlugIns/VoodooPS2Keyboard.kext/Contents/Info.plist
