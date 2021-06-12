@@ -1,3 +1,0 @@
-# Remove WARNING text
-rm string[preceding-sibling::key[#text =~ regexp("^#WARNING - .*")]]
-rm key[#text =~ regexp("^#WARNING - .*")]

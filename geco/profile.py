@@ -5,7 +5,6 @@ import logging
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import yaml
 from io import BytesIO
@@ -137,12 +136,39 @@ class Profile:
         MYROOT = self.efi_dir + "/OC"
         logging.debug("MYROOT=" + MYROOT)
         a = augeas.Augeas(root=MYROOT)
-        with open(MYROOT + "/Config.plist"):
-            with open("geco/config.augtool", "r") as file:
-                transformations = file.read()
-                logging.debug("Applying Augeas transformations: " + transformations)
-                a.add_transform("Xml", "/Config.plist")
-                a.load()
-                a.set("/augeas/context", "/files/Config.plist/plist/dict")
-                a.srun(sys.stdout, transformations)
-                a.save()
+        a.add_transform("Xml", "/Config.plist")
+        a.load()
+        a.set("/augeas/context", "/files/Config.plist/plist/dict")
+
+        logging.debug("Remove warnings")
+        a.remove("string[preceding-sibling::key[#text =~ regexp('^#WARNING - .*')]]")
+        a.remove("key[#text =~ regexp('^#WARNING - .*')]")
+        # FIXME: somehow this does not work here while it works in augtool
+        a.set("#text[1]", "\n\t")
+
+        logging.debug("Adding ACPI files to Config.plist")
+        directory = self.efi_dir + "/OC/ACPI"
+        a.defvar("ACPI", "dict[preceding-sibling::key[#text='ACPI']][1]")
+        a.defvar("ACPI_Add", "$ACPI/array[preceding-sibling::key[#text='Add']][1]")
+        a.remove("$ACPI_Add/dict")
+        # FIXME: somehow this does not work here while it works in augtool
+        a.set("$ACPI_Add/#text[1]", "\n\t\t\t")
+        for entry in os.scandir(directory):
+            if entry.path.endswith(".aml") and entry.is_file():
+                logging.debug("Found aml file: " + os.path.basename(entry.path))
+                a.set("$ACPI_Add/dict[last()+1]/#text", "\n\t\t\t\t")
+                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Comment")
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                # FIXME: set empty string does not work
+                a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Enabled")
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$ACPI_Add/dict[last()]/true[last()+1]", "#empty")
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Path")
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t")
+
+        a.save()
