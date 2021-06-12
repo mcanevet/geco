@@ -1,0 +1,7 @@
+set /augeas/context /files/Config.plist/plist/dict
+
+defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
+defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
+
+# Set PlatformInfo
+set $SystemProductName/#text "MacBookPro11,1"

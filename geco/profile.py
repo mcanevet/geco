@@ -5,6 +5,7 @@ import logging
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import yaml
 from io import BytesIO
@@ -170,5 +171,10 @@ class Profile:
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
                 a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t")
+
+        with open(self.path + "/config.augtool", "r") as file:
+            transformations = file.read()
+            logging.debug("Applying Augeas transformations: " + transformations)
+            a.srun(sys.stdout, transformations)
 
         a.save()
