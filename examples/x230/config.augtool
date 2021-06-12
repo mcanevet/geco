@@ -1,5 +1,20 @@
 set /augeas/context /files/Config.plist/plist/dict
 
+defvar ACPI dict[preceding-sibling::key[#text='ACPI']][1]
+defvar ACPI_Add $ACPI/array[preceding-sibling::key[#text='Add']][1]
+
+# Set ACPI Comment
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-AC.aml"]]/#text "Fix AC Adapter"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-DEVICE.aml"]]/#text "Virtual devices for macOS"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-EC.aml"]]/#text "EC Read and Write Access"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-EC-USBX.aml"]]/#text "USB Power"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-HPET.aml"]]/#text "Patched HPET"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-KBD.aml"]]/#text "TrackPad, TrackPoint Fixup"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PNLF.aml"]]/#text "Add Backlight Control"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PTWK.aml"]]/#text "Fixes Sleep and Wake issues"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-THINK.aml"]]/#text "ThinkSMC"
+# set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-XOSI.aml"]]/#text ""
+
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
 
