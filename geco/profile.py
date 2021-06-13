@@ -135,11 +135,14 @@ class Profile:
 
     def patch_config_plist(self):
         MYROOT = self.efi_dir + "/OC"
-        logging.debug("MYROOT=" + MYROOT)
-        a = augeas.Augeas(root=MYROOT)
+        a = augeas.Augeas(root=MYROOT, flags=augeas.Augeas.NO_LOAD+augeas.Augeas.NO_MODL_AUTOLOAD)
         a.add_transform("Xml", "/Config.plist")
         a.load()
         a.set("/augeas/context", "/files/Config.plist/plist/dict")
+        logging.debug("/augeas/root=" + a.get("/augeas/root"))
+        logging.debug("/augeas/context=" + a.get("/augeas/context"))
+        logging.debug("/augeas/load/Xml/lens=" + a.get("/augeas/load/Xml/lens"))
+        logging.debug("/augeas/load/Xml/incl=" + a.get("/augeas/load/Xml/incl"))
 
         logging.debug("Remove warnings")
         a.remove("string[preceding-sibling::key[#text =~ regexp('^#WARNING - .*')]]")
