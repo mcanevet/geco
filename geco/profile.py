@@ -177,4 +177,8 @@ class Profile:
             logging.debug("Applying Augeas transformations: " + transformations)
             a.srun(sys.stdout, transformations)
 
-        a.save()
+        try:
+            a.save()
+        except augeas.AugeasIOError as err:
+            logging.error(err.message)
+            sys.exit(1)
