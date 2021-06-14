@@ -159,30 +159,27 @@ class Profile:
         a.remove("$ACPI_Add/dict")
         # FIXME: somehow this does not work here while it works in augtool
         a.set("$ACPI_Add/#text[1]", "\n\t\t\t")
-        # for _ in range(23):
-        #     a.remove("$ACPI_Add/#text[2]")
-        for entry in os.scandir(directory):
-            if entry.path.endswith(".aml") and entry.is_file():
-                logging.debug("Found aml file: " + os.path.basename(entry.path))
-                a.set("$ACPI_Add/dict[last()+1]/#text", "\n\t\t\t\t")
+        for entry in glob.iglob(directory + '/*.aml'):
+            logging.debug("Found aml file: " + os.path.basename(entry))
+            a.set("$ACPI_Add/dict[last()+1]/#text", "\n\t\t\t\t")
 
-                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Comment")
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Comment")
+            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
 
-                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Path")
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Path")
+            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
 
-                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Enabled")
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                a.set("$ACPI_Add/dict[last()]/true[last()+1]", "#empty")
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t")
+            a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Enabled")
+            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$ACPI_Add/dict[last()]/true[last()+1]", "#empty")
+            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t")
 
-                a.insert("$ACPI_Add/dict[last()]", "#text")
-                a.set("$ACPI_Add/#text[last()]", "\t\t\t")
+            a.insert("$ACPI_Add/dict[last()]", "#text")
+            a.set("$ACPI_Add/#text[last()]", "\t\t\t")
 
         logging.debug("Adding Kexts to Config.plist")
         directory = self.efi_dir + "/OC/Kexts"
