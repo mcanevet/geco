@@ -148,7 +148,9 @@ class Profile:
         a.remove("string[preceding-sibling::key[#text =~ regexp('^#WARNING - .*')]]")
         a.remove("key[#text =~ regexp('^#WARNING - .*')]")
         # FIXME: somehow this does not work here while it works in augtool
-        a.set("#text[1]", "\n\t")
+        # a.set("#text[1]", "\n\t")
+        for _ in range(8):
+            a.remove("#text[2]")
 
         logging.debug("Adding ACPI files to Config.plist")
         directory = self.efi_dir + "/OC/ACPI"
@@ -157,6 +159,8 @@ class Profile:
         a.remove("$ACPI_Add/dict")
         # FIXME: somehow this does not work here while it works in augtool
         a.set("$ACPI_Add/#text[1]", "\n\t\t\t")
+        for _ in range(20):
+            a.remove("$ACPI_Add/#text[2]")
         for entry in os.scandir(directory):
             if entry.path.endswith(".aml") and entry.is_file():
                 logging.debug("Found aml file: " + os.path.basename(entry.path))
@@ -174,6 +178,8 @@ class Profile:
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
                 a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t")
+                a.insert("$ACPI_Add/dict[last()]", "#text")
+                a.set("$ACPI_Add/#text[last()]", "\t\t\t")
 
         with open(self.path + "/config.augtool", "r") as file:
             transformations = file.read()
