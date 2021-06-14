@@ -35,9 +35,9 @@ c48c1d9c6cf982c32580a9c58b0cce51  EFI/OC/Kexts/YogaSMC.kext/Contents/_CodeSignat
 676528412173fd28f5fefe179a42c7e4  EFI/OC/Kexts/YogaSMC.kext/Contents/Info.plist
 ded12e457903639edc28d07f4f8afe62  EFI/OC/Kexts/YogaSMC.kext/Contents/MacOS/YogaSMC
 a6f9949d5eb775ae5797ab90cd714858  EFI/OC/Drivers/OpenRuntime.efi
-f68fb543ea6ebfe226c6b4c5a45ea83c  EFI/OC/Drivers/OpenShell.efi
 d7a7ccb0744eeccf20cf8386d7340ad4  EFI/OC/Drivers/OpenCanopy.efi
 feb24f6acd2bbebbd6b5ec46cb5c35a2  EFI/OC/Drivers/HfsPlus.efi
+f68fb543ea6ebfe226c6b4c5a45ea83c  EFI/OC/Tools/OpenShell.efi
 0fb048392c68b4299581b6ddb4bc6b78  EFI/OC/OpenCore.efi
 4cbec0a6e814b6ab17f150f951c551e1  EFI/OC/Resources/Image/OldLock.icns
 f6880f476b7a60a51f406f21d71dda89  EFI/OC/Resources/Image/Left.icns

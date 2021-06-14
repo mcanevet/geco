@@ -93,7 +93,7 @@ class Profile:
                     zfile.extract("X64/EFI/OC/Drivers/OpenCanopy.efi", path=tmpdirname)
                     shutil.move(tmpdirname + "/X64/EFI/OC/Drivers/OpenCanopy.efi", self.efi_dir + "/OC/Drivers/OpenCanopy.efi")
                     zfile.extract("X64/EFI/OC/Tools/OpenShell.efi", path=tmpdirname)
-                    shutil.move(tmpdirname + "/X64/EFI/OC/Tools/OpenShell.efi", self.efi_dir + "/OC/Drivers/OpenShell.efi")
+                    shutil.move(tmpdirname + "/X64/EFI/OC/Tools/OpenShell.efi", self.efi_dir + "/OC/Tools/OpenShell.efi")
                     zfile.extract("Docs/Sample.plist", path=tmpdirname)
                     shutil.move(tmpdirname + "/Docs/Sample.plist", self.efi_dir + "/OC/Config.plist")
 
