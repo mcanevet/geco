@@ -196,14 +196,12 @@ class Profile:
 
                 a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Comment")
                 a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                # FIXME: setting empty string does not work
-                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
                 a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
 
                 a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MaxKernel")
                 a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                # FIXME: setting empty string does not work
-                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
                 a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
 
                 a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "PlistPath")
@@ -218,8 +216,7 @@ class Profile:
 
                 a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MinKernel")
                 a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                # FIXME: setting empty string does not work
-                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
                 a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
 
                 a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "ExecutablePath")
@@ -240,13 +237,14 @@ class Profile:
                 a.insert("$Kernel_Add/dict[last()]", "#text")
                 a.set("$Kernel_Add/#text[last()]", "\t\t\t")
 
-        # with open(self.path + "/config.augtool", "r") as file:
-        #     transformations = file.read()
-        #     logging.debug("Applying Augeas transformations: " + transformations)
-        #     a.srun(sys.stdout, transformations)
+        with open(self.path + "/config.augtool", "r") as file:
+            transformations = file.read()
+            logging.debug("Applying Augeas transformations: " + transformations)
+            a.srun(sys.stdout, transformations)
 
         try:
             a.save()
-        except augeas.AugeasIOError as err:
-            logging.error(err.message)
+        except augeas.AugeasIOError:
+            for p in a.match("/augeas//error"):
+                logging.error(a.get(p) + ": " + a.get(p + "/message"))
             sys.exit(1)
