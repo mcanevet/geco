@@ -236,6 +236,63 @@ class Profile:
             a.insert("$Kernel_Add/dict[last()]", "#text")
             a.set("$Kernel_Add/#text[last()]", "\t\t\t")
 
+        logging.debug("Adding Tools to Config.plist")
+        directory = self.efi_dir + "/OC/Tools"
+        a.defvar("Misc", "dict[preceding-sibling::key[#text='Misc']][1]")
+        a.defvar("Tools", "$Misc/array[preceding-sibling::key[#text='Tools']][1]")
+        a.remove("$Tools/dict")
+        for entry in glob.iglob(directory + '/*.efi'):
+            logging.debug("Found Kext: " + os.path.basename(entry))
+            a.set("$Tools/dict[last()+1]/#text", "\n\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Comment")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "RealPath")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Flavour")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/string[last()+1]/#text", "Auto")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Name")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "TextMode")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Enabled")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Arguments")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/string[last()+1]", None)
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Path")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Auxiliary")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t")
+
+            a.insert("$Tools/dict[last()]", "#text")
+            a.set("$Tools/#text[last()]", "\t\t\t")
+
         with open(self.path + "/config.augtool", "r") as file:
             transformations = file.read()
             logging.debug("Applying Augeas transformations: " + transformations)
