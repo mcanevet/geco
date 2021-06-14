@@ -13,7 +13,7 @@ set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-KBD.aml"]]/#text
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PNLF.aml"]]/#text "Add Backlight Control"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PTWK.aml"]]/#text "Fixes Sleep and Wake issues"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-THINK.aml"]]/#text "ThinkSMC"
-# set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-XOSI.aml"]]/#text ""
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-XOSI.aml"]] ""
 
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
