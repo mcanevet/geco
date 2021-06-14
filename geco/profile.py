@@ -293,6 +293,16 @@ class Profile:
             a.insert("$Tools/dict[last()]", "#text")
             a.set("$Tools/#text[last()]", "\t\t\t")
 
+        logging.debug("Adding Drivers to Config.plist")
+        directory = self.efi_dir + "/OC/Drivers"
+        a.defvar("UEFI", "dict[preceding-sibling::key[#text='UEFI']][1]")
+        a.defvar("Drivers", "$UEFI/array[preceding-sibling::key[#text='Drivers']][1]")
+        a.remove("$Drivers/string")
+        for entry in glob.iglob(directory + '/*.efi'):
+            logging.debug("Found Drivers: " + os.path.basename(entry))
+            a.set("$Drivers/#text[last()+1]", "\t\t\t")
+            a.set("$Drivers/string[last()+1]/#text", os.path.basename(entry))
+
         with open(self.path + "/config.augtool", "r") as file:
             transformations = file.read()
             logging.debug("Applying Augeas transformations: " + transformations)
