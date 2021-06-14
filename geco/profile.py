@@ -159,32 +159,91 @@ class Profile:
         a.remove("$ACPI_Add/dict")
         # FIXME: somehow this does not work here while it works in augtool
         a.set("$ACPI_Add/#text[1]", "\n\t\t\t")
-        for _ in range(20):
-            a.remove("$ACPI_Add/#text[2]")
+        # for _ in range(23):
+        #     a.remove("$ACPI_Add/#text[2]")
         for entry in os.scandir(directory):
             if entry.path.endswith(".aml") and entry.is_file():
                 logging.debug("Found aml file: " + os.path.basename(entry.path))
                 a.set("$ACPI_Add/dict[last()+1]/#text", "\n\t\t\t\t")
+
                 a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Comment")
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                # FIXME: set empty string does not work
-                a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Enabled")
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-                a.set("$ACPI_Add/dict[last()]/true[last()+1]", "#empty")
-                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
                 a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Path")
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
                 a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Enabled")
+                a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$ACPI_Add/dict[last()]/true[last()+1]", "#empty")
                 a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t")
+
                 a.insert("$ACPI_Add/dict[last()]", "#text")
                 a.set("$ACPI_Add/#text[last()]", "\t\t\t")
 
-        with open(self.path + "/config.augtool", "r") as file:
-            transformations = file.read()
-            logging.debug("Applying Augeas transformations: " + transformations)
-            a.srun(sys.stdout, transformations)
+        logging.debug("Adding Kexts to Config.plist")
+        directory = self.efi_dir + "/OC/Kexts"
+        a.defvar("Kernel", "dict[preceding-sibling::key[#text='Kernel']][1]")
+        a.defvar("Kernel_Add", "$Kernel/array[preceding-sibling::key[#text='Add']][1]")
+        a.remove("$Kernel_Add/dict")
+        for entry in os.scandir(directory):
+            if entry.path.endswith(".kext") and entry.is_dir():
+                logging.debug("Found Kext: " + os.path.basename(entry.path))
+                a.set("$Kernel_Add/dict[last()+1]/#text", "\n\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Comment")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                # FIXME: setting empty string does not work
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MaxKernel")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                # FIXME: setting empty string does not work
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "PlistPath")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Contents/Info.plist")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Enabled")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$Kernel_Add/dict[last()]/true[last()+1]", "#empty")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MinKernel")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                # FIXME: setting empty string does not work
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", " ")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "ExecutablePath")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Contents/MacOS/" + os.path.splitext(os.path.basename(entry.path))[0])
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Arch")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Any")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+
+                a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "BundlePath")
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+                a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry.path))
+                a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t")
+
+                a.insert("$Kernel_Add/dict[last()]", "#text")
+                a.set("$Kernel_Add/#text[last()]", "\t\t\t")
+
+        # with open(self.path + "/config.augtool", "r") as file:
+        #     transformations = file.read()
+        #     logging.debug("Applying Augeas transformations: " + transformations)
+        #     a.srun(sys.stdout, transformations)
 
         try:
             a.save()
