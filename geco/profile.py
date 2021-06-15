@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import xml.etree.ElementTree as ET
 import yaml
 from io import BytesIO
 from urllib.request import urlopen
@@ -252,3 +253,8 @@ class Profile:
             for p in a.match("/augeas//error"):
                 logging.error(a.get(p) + ": " + a.get(p + "/message"))
             sys.exit(1)
+
+        logging.debug("Prettify Config.plist")
+        tree = ET.parse(self.efi_dir + "/OC/Config.plist")
+        ET.indent(tree.getroot()[0], space="\t", level=0)
+        tree.write(self.efi_dir + "/OC/Config.pretty.plist")
