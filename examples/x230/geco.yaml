@@ -10,9 +10,9 @@ opencore:
 
 kexts:
   # yamllint disable-line rule:line-length
-  - source: "https://github.com/OpenIntelWireless/itlwm/releases/download/v2.0.0-alpha/AirportItlwm-Big_Sur-v2.0.0-DEBUG-alpha-0d2c26c.zip"
+  - source: "https://github.com/OpenIntelWireless/itlwm/releases/download/v1.3.0/AirportItlwm_v1.3.0_stable_BigSur.kext.zip"
     files:
-      - "Big Sur/AirportItlwm.kext"
+      - "AirportItlwm.kext"
   # yamllint disable-line rule:line-length
   - source: "https://github.com/acidanthera/AppleALC/releases/download/1.6.0/AppleALC-1.6.0-RELEASE.zip"
     files:
