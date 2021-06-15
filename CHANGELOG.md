@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.1](https://www.github.com/mcanevet/geco/compare/v0.1.0...v0.1.1) (2021-06-15)
+
+
+### Bug Fixes
+
+* use AirportItlwm v1.3.0 for now ([1be3414](https://www.github.com/mcanevet/geco/commit/1be341409cb7eab1a355a5acc0020d341acfd597))
+
 ## 0.1.0 (2021-06-15)
 
 
