@@ -127,7 +127,7 @@ class Profile:
     def compile_ssdts(self):
         cwd = os.getcwd()
         os.chdir(self.path + "/SSDTs")
-        for ssdt in glob.glob("*.dsl"):
+        for ssdt in glob.glob("SSDT-*.dsl"):
             aml_file = self.efi_dir + "/OC/ACPI/" + os.path.splitext(ssdt)[0] + ".aml"
             logging.debug("Compiling " + ssdt + " to " + aml_file)
             subprocess.run(["iasl", "-p", aml_file, ssdt])
