@@ -9,14 +9,10 @@ DefinitionBlock ("", "SSDT", 2, "X230", "DEVICE", 0)
             Name (_ALI, 0x012C)
             Name (_ALR, Package ()
             {
-                Package ()
-                {
-                    0x64,
-                    0x012C
-                }
+                Package () { 0x64, 0x012C }
             })
 
-            Method (_STA, 0, NotSerialized)  // _STA: Status
+            Method (_STA, 0, NotSerialized)
             {
                 If (_OSI ("Darwin"))
                 {
@@ -28,7 +24,7 @@ DefinitionBlock ("", "SSDT", 2, "X230", "DEVICE", 0)
                 }
             }
         }
-        
+            
         Device (PWRB)
         {
             Name (_HID, EisaId ("PNP0C0C"))
@@ -42,7 +38,7 @@ DefinitionBlock ("", "SSDT", 2, "X230", "DEVICE", 0)
             {
                 If (_OSI ("Darwin"))
                 {
-                    Return (0x0B)
+                    Return (0x0F)
                 }
                 Else
                 {
@@ -82,6 +78,7 @@ DefinitionBlock ("", "SSDT", 2, "X230", "DEVICE", 0)
         {
             Name (_CID, "smbus")
             Name (_ADR, Zero)
+            
             Device (DVL0)
             {
                 Name (_ADR, 0x57)
@@ -103,6 +100,7 @@ DefinitionBlock ("", "SSDT", 2, "X230", "DEVICE", 0)
                     })
                 }
             }
+            
             Method (_STA, 0, NotSerialized)
             {
                 If (_OSI ("Darwin"))

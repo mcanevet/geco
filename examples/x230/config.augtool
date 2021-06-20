@@ -1,19 +1,51 @@
 set /augeas/context /files/Config.plist/plist/dict
 
+# ACPI Section
 defvar ACPI dict[preceding-sibling::key[#text='ACPI']][1]
+
+## Add
 defvar ACPI_Add $ACPI/array[preceding-sibling::key[#text='Add']][1]
 
-# Set ACPI Comment
-set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-AC.aml"]]/#text "Fix AC Adapter"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-AC.aml"]]/#text "Patched AC Adapter"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-DEVICE.aml"]]/#text "Virtual devices for macOS"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-EC.aml"]]/#text "EC Read and Write Access"
-set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-EC-USBX.aml"]]/#text "USB Power"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-HPET.aml"]]/#text "Patched HPET"
-set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-KBD.aml"]]/#text "TrackPad, TrackPoint Fixup"
-set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PNLF.aml"]]/#text "Add Backlight Control"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-KBD.aml"]]/#text "TrackPad, TrackPoint Patched"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PM.aml"]]/#text "System Power Management"
+set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PNLF.aml"]]/#text "Smooth Brightness Adjustment"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-PTWK.aml"]]/#text "Fixes Sleep and Wake issues"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-THINK.aml"]]/#text "ThinkSMC"
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-XOSI.aml"]] ""
+
+# Disable SSDT-PTWK.aml
+defvar SSDT_PTWK $ACPI_Add/dict/string[#text="SSDT-PTWK.aml"]/..
+ins false after $SSDT_PTWK/#text[preceding-sibling::key[#text="Enabled"]][1]
+set $SSDT_PTWK/false[preceding-sibling::key[#text="Enabled"]][1] "#empty"
+rm $SSDT_PTWK/true[preceding-sibling::key[#text="Enabled"]][1]
+
+## Delete
+
+defvar ACPI_Delete $ACPI/array[preceding-sibling::key[#text='Delete']][1]
+
+# https://dortania.github.io/OpenCore-Install-Guide/config.plist/ivy-bridge.html#acpi
+defvar ACPI_Delete_CpuPm $ACPI_Delete/dict/data[preceding-sibling::key[#text="OemTableId"]][#text="Q3B1UG0AAAA="]/..
+rm $ACPI_Delete_CpuPm/false[preceding-sibling::key[#text="All"]][1]
+ins true after $ACPI_Delete_CpuPm/#text[preceding-sibling::key[#text="All"]][1]
+set $ACPI_Delete_CpuPm/true[preceding-sibling::key[#text="All"]][1] "#empty"
+rm $ACPI_Delete_CpuPm/false[preceding-sibling::key[#text="Enabled"]][1]
+ins true after $ACPI_Delete_CpuPm/#text[preceding-sibling::key[#text="Enabled"]][1]
+set $ACPI_Delete_CpuPm/true[preceding-sibling::key[#text="Enabled"]][1] "#empty"
+
+defvar ACPI_Delete_Cpu0Ist $ACPI_Delete/dict/data[preceding-sibling::key[#text="OemTableId"]][#text="Q3B1MElzdAA="]/..
+rm $ACPI_Delete_Cpu0Ist/false[preceding-sibling::key[#text="All"]][1]
+ins true after $ACPI_Delete_Cpu0Ist/#text[preceding-sibling::key[#text="All"]][1]
+set $ACPI_Delete_Cpu0Ist/true[preceding-sibling::key[#text="All"]][1] "#empty"
+rm $ACPI_Delete_Cpu0Ist/false[preceding-sibling::key[#text="Enabled"]][1]
+ins true after $ACPI_Delete_Cpu0Ist/#text[preceding-sibling::key[#text="Enabled"]][1]
+set $ACPI_Delete_Cpu0Ist/true[preceding-sibling::key[#text="Enabled"]][1] "#empty"
+
+## Patch
+
 
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]

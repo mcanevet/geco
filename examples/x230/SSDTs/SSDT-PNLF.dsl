@@ -1,7 +1,5 @@
 DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
-{       
-    External (RMCF.LEVW, IntObj)
-
+{
     External (_SB.PCI0.VID, DeviceObj)
     
     Scope (_SB.PCI0.VID)
@@ -16,6 +14,7 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
             Name (_HID, EisaId ("APP0002"))
             Name (_CID, "backlight")
             Name (_UID, 14)
+            
             Method (_STA, 0, NotSerialized)
             {
                 If (_OSI ("Darwin"))
@@ -30,11 +29,11 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
         
             Field (\_SB.PCI0.VID.RMP3, AnyAcc, NoLock, Preserve)
             {
-                Offset (0x10), 
-                BAR1,   32
+                Offset(0x02), GDID, 16,
+                Offset(0x10), BAR1, 32,
             }
 
-            OperationRegion (RMB1, SystemMemory, And (BAR1, 0xFFFFFFFFFFFFFFF0), 0x000E1184)
+            OperationRegion (RMB1, SystemMemory, And (BAR1, 0xFFFFFFF0), 0x000E1184)
             Field (RMB1, AnyAcc, Lock, Preserve)
             {
                 Offset (0x48250), 
@@ -42,8 +41,7 @@ DefinitionBlock ("", "SSDT", 2, "X230", "PNLF", 0)
                 LEVL,   32, 
                 Offset (0xC8250), 
                 LEVW,   32, 
-                LEVX,   32, 
-                LEVD,   32
+                LEVX,   32,
             }
 
             Method (_INI, 0, NotSerialized)

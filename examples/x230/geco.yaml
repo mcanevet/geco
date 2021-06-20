@@ -3,10 +3,9 @@ version: "1"
 
 opencore:
   version: "0.7.0"
-  prerelease: "974228a"
   variant: "RELEASE"
   # git reference of https://github.com/acidanthera/OcBinaryData/
-  OcBinaryData-ref: "ccf3d0c36784100293ccfb2865e10cd37f7a78ee"
+  OcBinaryData-ref: "6dd2d92383edee522052ebbe2c634c92894b37e6"
 
 kexts:
   # yamllint disable-line rule:line-length
