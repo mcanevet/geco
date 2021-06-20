@@ -189,19 +189,19 @@ class Profile:
             logging.debug("Found Kext: " + os.path.basename(entry))
 
             a.set("$Kernel_Add/dict[last()+1]/#text", "\n\t\t\t\t")
+            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Arch")
+            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "x86_64")
+
+            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "BundlePath")
+            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", os.path.relpath(entry, directory))
+
+            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Comment")
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MaxKernel")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "PlistPath")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Contents/Info.plist")
 
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Enabled")
@@ -209,24 +209,24 @@ class Profile:
             a.set("$Kernel_Add/dict[last()]/true[last()+1]", "#empty")
 
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MinKernel")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "ExecutablePath")
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Contents/MacOS/" + os.path.splitext(os.path.basename(entry))[0])
 
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Arch")
+            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MaxKernel")
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Any")
+            a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
 
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "BundlePath")
+            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MinKernel")
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", os.path.relpath(entry, directory))
+            a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
+
+            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "PlistPath")
+            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Contents/Info.plist")
 
             a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t")
             a.insert("$Kernel_Add/dict[last()]", "#text")
@@ -240,14 +240,24 @@ class Profile:
         for entry in glob.iglob(directory + '/*.efi'):
             logging.debug("Found Tool: " + os.path.basename(entry))
             a.set("$Tools/dict[last()+1]/#text", "\n\t\t\t\t")
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Arguments")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/string[last()+1]", None)
+
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Auxiliary")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
+
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Tools/dict[last()]/key[last()+1]/#text", "Comment")
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
 
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "RealPath")
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Enabled")
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
+            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
 
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Tools/dict[last()]/key[last()+1]/#text", "Flavour")
@@ -260,29 +270,19 @@ class Profile:
             a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
 
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "TextMode")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Enabled")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Arguments")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/string[last()+1]", None)
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Tools/dict[last()]/key[last()+1]/#text", "Path")
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
             a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
 
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Auxiliary")
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "RealPath")
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
+            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
+
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/key[last()+1]/#text", "TextMode")
+            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
+            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
 
             a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t")
             a.insert("$Tools/dict[last()]", "#text")
