@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.1.2](https://www.github.com/mcanevet/geco/compare/v0.1.1...v0.1.2) (2021-06-20)
+
+
+### Bug Fixes
+
+* indent XML with Augeas ([6aa957b](https://www.github.com/mcanevet/geco/commit/6aa957bfb115234df7f61b99871bd959ff21997b))
+* order key alphabeticaly ([c66ebc1](https://www.github.com/mcanevet/geco/commit/c66ebc1bb7ec1ee5152f14991ec0744d35605f08))
+
 ### [0.1.1](https://www.github.com/mcanevet/geco/compare/v0.1.0...v0.1.1) (2021-06-15)
 
 
