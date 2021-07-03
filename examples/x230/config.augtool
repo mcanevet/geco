@@ -46,6 +46,68 @@ set $ACPI_Delete_Cpu0Ist/true[preceding-sibling::key[#text="Enabled"]][1] "#empt
 
 ## Patch
 
+defvar ACPI_Patch $ACPI/array[preceding-sibling::key[#text='Patch']][1]
+
+# Entries from SSDTime
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "OSIF to XSIF"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "T1NJRg=="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "WFNJRg=="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "_OSI to XOSI"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "X09TSQ=="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "WE9TSQ=="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
 
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
