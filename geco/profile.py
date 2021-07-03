@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import xml.etree.ElementTree as ET
 import yaml
 from io import BytesIO
 from urllib.request import urlopen
@@ -147,38 +148,26 @@ class Profile:
         logging.debug("Remove warnings")
         a.remove("string[preceding-sibling::key[#text =~ regexp('^#WARNING - .*')]]")
         a.remove("key[#text =~ regexp('^#WARNING - .*')]")
-        # FIXME: somehow this does not work here while it works in augtool
-        # a.set("#text[1]", "\n\t")
-        for _ in range(8):
-            a.remove("#text[2]")
 
         logging.debug("Adding ACPI files to Config.plist")
         directory = self.efi_dir + "/OC/ACPI"
         a.defvar("ACPI", "dict[preceding-sibling::key[#text='ACPI']][1]")
         a.defvar("ACPI_Add", "$ACPI/array[preceding-sibling::key[#text='Add']][1]")
         a.remove("$ACPI_Add/dict")
-        # FIXME: somehow this does not work here while it works in augtool
-        a.set("$ACPI_Add/#text[1]", "\n\t\t\t")
+
         for entry in glob.iglob(directory + '/*.aml'):
             logging.debug("Found aml file: " + os.path.basename(entry))
-            a.set("$ACPI_Add/dict[last()+1]/#text", "\n\t\t\t\t")
-            a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Comment")
-            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
+            a.defnode("mynode", "$ACPI_Add/dict[last()+1]", "")
+            a.set("$mynode/key[last()+1]/#text", "Comment")
+            a.set("$mynode/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$mynode/key[last()+1]/#text", "Enabled")
+            a.set("$mynode/true[last()+1]", "#empty")
+            a.set("$mynode/key[last()+1]/#text", "Path")
+            a.set("$mynode/string[last()+1]/#text", os.path.basename(entry))
 
-            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Enabled")
-            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$ACPI_Add/dict[last()]/true[last()+1]", "#empty")
-
-            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$ACPI_Add/dict[last()]/key[last()+1]/#text", "Path")
-            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$ACPI_Add/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
-
-            a.set("$ACPI_Add/dict[last()]/#text[last()+1]", "\t\t\t")
-            a.insert("$ACPI_Add/dict[last()]", "#text")
-            a.set("$ACPI_Add/#text[last()]", "\t\t\t")
+        logging.debug("Remove default ACPI patches from Config.plist")
+        a.defvar("ACPI_Patch", "$ACPI/array[preceding-sibling::key[#text='Patch']][1]")
+        a.remove("$ACPI_Patch/dict")
 
         logging.debug("Adding Kexts to Config.plist")
         directory = self.efi_dir + "/OC/Kexts"
@@ -187,50 +176,23 @@ class Profile:
         a.remove("$Kernel_Add/dict")
         for entry in glob.iglob(directory + '/**/*.kext', recursive=True):
             logging.debug("Found Kext: " + os.path.basename(entry))
-
-            a.set("$Kernel_Add/dict[last()+1]/#text", "\n\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Arch")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "x86_64")
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "BundlePath")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", os.path.relpath(entry, directory))
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Comment")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "Enabled")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/true[last()+1]", "#empty")
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "ExecutablePath")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Contents/MacOS/" + os.path.splitext(os.path.basename(entry))[0])
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MaxKernel")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "MinKernel")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]", None)
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/key[last()+1]/#text", "PlistPath")
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Kernel_Add/dict[last()]/string[last()+1]/#text", "Contents/Info.plist")
-
-            a.set("$Kernel_Add/dict[last()]/#text[last()+1]", "\t\t\t")
-            a.insert("$Kernel_Add/dict[last()]", "#text")
-            a.set("$Kernel_Add/#text[last()]", "\t\t\t")
+            a.defnode("mynode", "$Kernel_Add/dict[last()+1]", "")
+            a.set("$mynode/key[last()+1]/#text", "Arch")
+            a.set("$mynode/string[last()+1]/#text", "x86_64")
+            a.set("$mynode/key[last()+1]/#text", "BundlePath")
+            a.set("$mynode/string[last()+1]/#text", os.path.relpath(entry, directory))
+            a.set("$mynode/key[last()+1]/#text", "Comment")
+            a.set("$mynode/string[last()+1]", None)
+            a.set("$mynode/key[last()+1]/#text", "Enabled")
+            a.set("$mynode/true[last()+1]", "#empty")
+            a.set("$mynode/key[last()+1]/#text", "ExecutablePath")
+            a.set("$mynode/string[last()+1]/#text", "Contents/MacOS/" + os.path.splitext(os.path.basename(entry))[0])
+            a.set("$mynode/key[last()+1]/#text", "MaxKernel")
+            a.set("$mynode/string[last()+1]", None)
+            a.set("$mynode/key[last()+1]/#text", "MinKernel")
+            a.set("$mynode/string[last()+1]", None)
+            a.set("$mynode/key[last()+1]/#text", "PlistPath")
+            a.set("$mynode/string[last()+1]/#text", "Contents/Info.plist")
 
         logging.debug("Adding Tools to Config.plist")
         directory = self.efi_dir + "/OC/Tools"
@@ -239,54 +201,25 @@ class Profile:
         a.remove("$Tools/dict")
         for entry in glob.iglob(directory + '/*.efi'):
             logging.debug("Found Tool: " + os.path.basename(entry))
-            a.set("$Tools/dict[last()+1]/#text", "\n\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Arguments")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/string[last()+1]", None)
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Auxiliary")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Comment")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Enabled")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/true[last()+1]", "#empty")
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Flavour")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/string[last()+1]/#text", "Auto")
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Name")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "Path")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/string[last()+1]/#text", os.path.basename(entry))
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "RealPath")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/key[last()+1]/#text", "TextMode")
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t\t")
-            a.set("$Tools/dict[last()]/false[last()+1]", "#empty")
-
-            a.set("$Tools/dict[last()]/#text[last()+1]", "\t\t\t")
-            a.insert("$Tools/dict[last()]", "#text")
-            a.set("$Tools/#text[last()]", "\t\t\t")
+            a.defnode("mynode", "$Tools/dict[last()+1]", "")
+            a.set("$mynode/key[last()+1]/#text", "Arguments")
+            a.set("$mynode/string[last()+1]", None)
+            a.set("$mynode/key[last()+1]/#text", "Auxiliary")
+            a.set("$mynode/true[last()+1]", "#empty")
+            a.set("$mynode/key[last()+1]/#text", "Comment")
+            a.set("$mynode/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$mynode/key[last()+1]/#text", "Enabled")
+            a.set("$mynode/true[last()+1]", "#empty")
+            a.set("$mynode/key[last()+1]/#text", "Flavour")
+            a.set("$mynode/string[last()+1]/#text", "Auto")
+            a.set("$mynode/key[last()+1]/#text", "Name")
+            a.set("$mynode/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$mynode/key[last()+1]/#text", "Path")
+            a.set("$mynode/string[last()+1]/#text", os.path.basename(entry))
+            a.set("$mynode/key[last()+1]/#text", "RealPath")
+            a.set("$mynode/false[last()+1]", "#empty")
+            a.set("$mynode/key[last()+1]/#text", "TextMode")
+            a.set("$mynode/false[last()+1]", "#empty")
 
         logging.debug("Adding Drivers to Config.plist")
         directory = self.efi_dir + "/OC/Drivers"
@@ -295,7 +228,6 @@ class Profile:
         a.remove("$Drivers/string")
         for entry in glob.iglob(directory + '/*.efi'):
             logging.debug("Found Drivers: " + os.path.basename(entry))
-            a.set("$Drivers/#text[last()+1]", "\t\t\t")
             a.set("$Drivers/string[last()+1]/#text", os.path.basename(entry))
 
         with open(self.path + "/config.augtool", "r") as file:
@@ -309,3 +241,8 @@ class Profile:
             for p in a.match("/augeas//error"):
                 logging.error(a.get(p) + ": " + a.get(p + "/message"))
             sys.exit(1)
+
+        logging.debug("Prettify Config.plist")
+        tree = ET.parse(self.efi_dir + "/OC/Config.plist")
+        ET.indent(tree.getroot()[0], space="\t", level=0)
+        tree.write(self.efi_dir + "/OC/Config.plist")

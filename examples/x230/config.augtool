@@ -18,10 +18,10 @@ set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-THINK.aml"]]/#te
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-XOSI.aml"]] ""
 
 # Disable SSDT-PTWK.aml
-defvar SSDT_PTWK $ACPI_Add/dict/string[#text="SSDT-PTWK.aml"]/..
-ins false after $SSDT_PTWK/#text[preceding-sibling::key[#text="Enabled"]][1]
-set $SSDT_PTWK/false[preceding-sibling::key[#text="Enabled"]][1] "#empty"
-rm $SSDT_PTWK/true[preceding-sibling::key[#text="Enabled"]][1]
+# defvar SSDT_PTWK $ACPI_Add/dict/string[#text="SSDT-PTWK.aml"]/..
+# ins false after $SSDT_PTWK/#text[preceding-sibling::key[#text="Enabled"]][1]
+# set $SSDT_PTWK/false[preceding-sibling::key[#text="Enabled"]][1] "#empty"
+# rm $SSDT_PTWK/true[preceding-sibling::key[#text="Enabled"]][1]
 
 ## Delete
 
