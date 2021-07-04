@@ -335,6 +335,40 @@ rm $Booter/array[preceding-sibling::key[#text='MmioWhitelist']][1]/#text
 rm $Booter/array[preceding-sibling::key[#text='Patch']][1]/dict
 rm $Booter/array[preceding-sibling::key[#text='Patch']][1]/#text
 
+# DeviceProperties Section
+
+defvar DeviceProperties dict[preceding-sibling::key[#text='DeviceProperties']][1]
+
+# DeviceProperties Add
+
+defvar DeviceProperties_Add $DeviceProperties/dict[preceding-sibling::key[#text='Add']][1]
+
+rm $DeviceProperties_Add/#text
+rm $DeviceProperties_Add/dict
+rm $DeviceProperties_Add/key
+
+set $DeviceProperties_Add/key[last()+1]/#text "PciRoot(0x0)/Pci(0x1b,0x0)"
+defnode mynode $DeviceProperties_Add/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "layout-id"
+set $mynode/data[last()+1]/#text "NwAAAA=="
+
+set $DeviceProperties_Add/key[last()+1]/#text "PciRoot(0x0)/Pci(0x2,0x0)"
+defnode mynode $DeviceProperties_Add/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "AAPL,ig-platform-id"
+set $mynode/data[last()+1]/#text "AwBmAQ=="
+set $mynode/key[last()+1]/#text "framebuffer-con1-alldata"
+set $mynode/data[last()+1]/#text "AgUAAAAIAAAHBAAAAwQAAAAIAACBAAAABAYAAAAIAACBAAAA"
+set $mynode/key[last()+1]/#text "framebuffer-con1-enable"
+set $mynode/data[last()+1]/#text "AQAAAA=="
+set $mynode/key[last()+1]/#text "framebuffer-pipecount"
+set $mynode/data[last()+1]/#text "AgAAAA=="
+set $mynode/key[last()+1]/#text "framebuffer-portcount"
+set $mynode/data[last()+1]/#text "BAAAAA=="
+set $mynode/key[last()+1]/#text "framebuffer-stolenmem"
+set $mynode/data[last()+1]/#text "AAAABA=="
+set $mynode/key[last()+1]/#text "framebuffer-patch-enable"
+set $mynode/data[last()+1]/#text "AQAAAA=="
+
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
 
