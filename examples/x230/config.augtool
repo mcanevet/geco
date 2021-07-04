@@ -109,6 +109,216 @@ set $mynode/integer[last()+1]/#text 0
 set $mynode/key[last()+1]/#text "TableSignature"
 set $mynode/data[last()+1] ""
 
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "_DSM to XDSM"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "X0RTTQ=="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "WERTTQ=="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "HPET _CRS to XCRS"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "IF9DUlM="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "IFhDUlM="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "TIMR IRQ 0 Patch"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "IgEAeQA="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "IgAAeQA="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "RTC IRQ 8 Patch"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "IgABeQA="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "IgAAeQA="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "EHC1 to EH01"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "RUhDMQ=="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "RUgwMQ=="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "EHC2 to EH02"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "RUhDMg=="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "RUgwMg=="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
+defnode mynode $ACPI_Patch/dict[last()+1] ""
+set $mynode/key[last()+1]/#text "Base"
+set $mynode/string[last()+1] ""
+set $mynode/key[last()+1]/#text "BaseSkip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Comment"
+set $mynode/string[last()+1]/#text "Name (NBCF, 0x00) to (NBCF, 0x01)"
+set $mynode/key[last()+1]/#text "Count"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Enabled"
+set $mynode/true[last()+1] "#empty"
+set $mynode/key[last()+1]/#text "Find"
+set $mynode/data[last()+1]/#text "CE5CQ0YKAA=="
+set $mynode/key[last()+1]/#text "Limit"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "Mask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "OemTableId"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Replace"
+set $mynode/data[last()+1]/#text "CE5CQ0YKAQ=="
+set $mynode/key[last()+1]/#text "ReplaceMask"
+set $mynode/data[last()+1] ""
+set $mynode/key[last()+1]/#text "Skip"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableLength"
+set $mynode/integer[last()+1]/#text 0
+set $mynode/key[last()+1]/#text "TableSignature"
+set $mynode/data[last()+1] ""
+
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
 
