@@ -343,9 +343,7 @@ defvar DeviceProperties dict[preceding-sibling::key[#text='DeviceProperties']][1
 
 defvar DeviceProperties_Add $DeviceProperties/dict[preceding-sibling::key[#text='Add']][1]
 
-rm $DeviceProperties_Add/#text
-rm $DeviceProperties_Add/dict
-rm $DeviceProperties_Add/key
+rm $DeviceProperties_Add/*
 
 set $DeviceProperties_Add/key[last()+1]/#text "PciRoot(0x0)/Pci(0x1b,0x0)"
 defnode mynode $DeviceProperties_Add/dict[last()+1] ""
@@ -369,8 +367,28 @@ set $mynode/data[last()+1]/#text "AAAABA=="
 set $mynode/key[last()+1]/#text "framebuffer-patch-enable"
 set $mynode/data[last()+1]/#text "AQAAAA=="
 
-defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
-defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
+# Kernel Section
 
-# Set PlatformInfo
+defvar Kernel dict[preceding-sibling::key[#text='Kernel']][1]
+
+# Kernel Block
+
+defvar Kernel_Block $Kernel/array[preceding-sibling::key[#text='Block']][1]
+rm $Kernel_Block/*
+
+# Kernel Force
+
+defvar Kernel_Force $Kernel/array[preceding-sibling::key[#text='Force']][1]
+rm $Kernel_Force/*
+
+# Kernel Patch
+
+defvar Kernel_Patch $Kernel/array[preceding-sibling::key[#text='Patch']][1]
+rm $Kernel_Patch/*
+
+# PlatformInfo Section
+
+defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
+
+defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
 set $SystemProductName/#text "MacBookPro11,1"
