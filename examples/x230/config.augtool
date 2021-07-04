@@ -3,7 +3,7 @@ set /augeas/context /files/Config.plist/plist/dict
 # ACPI Section
 defvar ACPI dict[preceding-sibling::key[#text='ACPI']][1]
 
-## Add
+## ACPI Add
 defvar ACPI_Add $ACPI/array[preceding-sibling::key[#text='Add']][1]
 
 set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-AC.aml"]]/#text "Patched AC Adapter"
@@ -23,7 +23,7 @@ set $ACPI_Add/dict/string[following-sibling::string[#text="SSDT-XOSI.aml"]] ""
 # set $SSDT_PTWK/false[preceding-sibling::key[#text="Enabled"]][1] "#empty"
 # rm $SSDT_PTWK/true[preceding-sibling::key[#text="Enabled"]][1]
 
-## Delete
+## ACPI Delete
 
 defvar ACPI_Delete $ACPI/array[preceding-sibling::key[#text='Delete']][1]
 
@@ -44,7 +44,7 @@ rm $ACPI_Delete_Cpu0Ist/false[preceding-sibling::key[#text="Enabled"]][1]
 ins true after $ACPI_Delete_Cpu0Ist/#text[preceding-sibling::key[#text="Enabled"]][1]
 set $ACPI_Delete_Cpu0Ist/true[preceding-sibling::key[#text="Enabled"]][1] "#empty"
 
-## Patch
+## ACPI Patch
 
 defvar ACPI_Patch $ACPI/array[preceding-sibling::key[#text='Patch']][1]
 
@@ -325,6 +325,15 @@ defvar ACPI_Quirks $ACPI/dict[preceding-sibling::key[#text='Quirks']][1]
 
 set $ACPI_Quirks/key[last()+1]/#text "SyncTableIds"
 set $ACPI_Quirks/false[last()+1] ""
+
+# Booter Section
+
+defvar Booter dict[preceding-sibling::key[#text='Booter']][1]
+
+rm $Booter/array[preceding-sibling::key[#text='MmioWhitelist']][1]/dict
+rm $Booter/array[preceding-sibling::key[#text='MmioWhitelist']][1]/#text
+rm $Booter/array[preceding-sibling::key[#text='Patch']][1]/dict
+rm $Booter/array[preceding-sibling::key[#text='Patch']][1]/#text
 
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
