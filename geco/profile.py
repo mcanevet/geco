@@ -245,4 +245,7 @@ class Profile:
         logging.debug("Prettify Config.plist")
         tree = ET.parse(self.efi_dir + "/OC/Config.plist")
         ET.indent(tree.getroot()[0], space="\t", level=0)
-        tree.write(self.efi_dir + "/OC/Config.plist")
+
+        logging.debug("Canonicalize Config.plist")
+        with open(self.efi_dir + "/OC/Config.plist", mode='w', encoding='utf-8') as out_file:
+            ET.canonicalize(ET.tostring(tree.getroot()), out=out_file)
