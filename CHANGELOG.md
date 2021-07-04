@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.0](https://www.github.com/mcanevet/geco/compare/v0.1.1...v0.2.0) (2021-07-04)
+
+
+### Features
+
+* canonicalize Config.plist ([48cbe43](https://www.github.com/mcanevet/geco/commit/48cbe43051dd3ed950c3f2a0a2717cdf427b9441))
+* compile only SSDT files named SSDT-*.dsl ([e062373](https://www.github.com/mcanevet/geco/commit/e06237317878a23efc773704c37613dd12f34555))
+* prettify XML ([a675b95](https://www.github.com/mcanevet/geco/commit/a675b95adfbfe982cf64c26e187e2a618e449bb1))
+
+
+### Bug Fixes
+
+* indent XML with Augeas ([6aa957b](https://www.github.com/mcanevet/geco/commit/6aa957bfb115234df7f61b99871bd959ff21997b))
+* order key alphabeticaly ([c66ebc1](https://www.github.com/mcanevet/geco/commit/c66ebc1bb7ec1ee5152f14991ec0744d35605f08))
+
 ### [0.1.1](https://www.github.com/mcanevet/geco/compare/v0.1.0...v0.1.1) (2021-06-15)
 
 
