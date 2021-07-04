@@ -319,6 +319,13 @@ set $mynode/integer[last()+1]/#text 0
 set $mynode/key[last()+1]/#text "TableSignature"
 set $mynode/data[last()+1] ""
 
+## ACPI Quirks
+
+defvar ACPI_Quirks $ACPI/dict[preceding-sibling::key[#text='Quirks']][1]
+
+set $ACPI_Quirks/key[last()+1]/#text "SyncTableIds"
+set $ACPI_Quirks/false[last()+1] ""
+
 defvar PlatformInfo dict[preceding-sibling::key[#text='PlatformInfo']][1]
 defvar SystemProductName $PlatformInfo/dict/string[preceding-sibling::key[#text='SystemProductName']][1]
 
